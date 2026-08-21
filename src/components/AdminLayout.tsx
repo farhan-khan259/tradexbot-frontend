@@ -11,7 +11,6 @@ import {
   X,
   Bell,
   ScanFace,
-  FileSearch,
 } from "lucide-react";
 import { Logo } from "./Logo";
 import { useAuth } from "../auth/AuthContext";
@@ -23,7 +22,6 @@ const navItems = [
   { to: "/admin/withdrawals", label: "Withdrawals", Icon: ArrowUpFromLine, end: false },
   { to: "/admin/notifications", label: "Notifications", Icon: Bell, end: false },
   { to: "/admin/kyc", label: "KYC review", Icon: ScanFace, end: false },
-  { to: "/admin/audit", label: "Audit logs", Icon: FileSearch, end: false },
 ];
 
 export function AdminLayout({ children }: { children: ReactNode }) {

@@ -12,7 +12,6 @@ import {
   Menu,
   X,
   Bell,
-  Shield,
   ScanFace,
   ListChecks,
   ChevronRight,
@@ -34,7 +33,6 @@ const navItems = [
   { to: "/referrals", label: "Referrals", Icon: Users },
   { to: "/notifications", label: "Notifications", Icon: Bell },
   { to: "/kyc", label: "KYC verification", Icon: ScanFace },
-  { to: "/security", label: "Security", Icon: Shield },
 ];
 
 const customerServiceUrl = "https://t.me/TradiefySupport";

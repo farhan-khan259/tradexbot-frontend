@@ -27,11 +27,9 @@ import { AdminDeposits } from "./pages/admin/AdminDeposits";
 import { AdminWithdrawals } from "./pages/admin/AdminWithdrawals";
 import { AdminNotifications } from "./pages/admin/AdminNotifications";
 import { AdminKYC } from "./pages/admin/AdminKYC";
-import { AdminAudit } from "./pages/admin/AdminAudit";
 import { TradeHistory } from "./pages/TradeHistory";
 import { Notifications } from "./pages/Notifications";
 import { KYC } from "./pages/KYC";
-import { Security } from "./pages/Security";
 
 function Shell({ children }: { children: React.ReactNode }) {
   return (
@@ -78,7 +76,6 @@ export default function App() {
       <Route path="/referrals" element={<Shell><Referrals /></Shell>} />
       <Route path="/notifications" element={<Shell><Notifications /></Shell>} />
       <Route path="/kyc" element={<Shell><KYC /></Shell>} />
-      <Route path="/security" element={<Shell><Security /></Shell>} />
 
       {/* Admin area (separate login + guard) */}
       <Route path="/admin/login" element={<AdminLogin />} />
@@ -88,7 +85,6 @@ export default function App() {
       <Route path="/admin/withdrawals" element={<AdminShell><AdminWithdrawals /></AdminShell>} />
       <Route path="/admin/notifications" element={<AdminShell><AdminNotifications /></AdminShell>} />
       <Route path="/admin/kyc" element={<AdminShell><AdminKYC /></AdminShell>} />
-      <Route path="/admin/audit" element={<AdminShell><AdminAudit /></AdminShell>} />
 
       <Route path="*" element={<Navigate to="/dashboard" replace />} />
     </Routes>

@@ -20,7 +20,6 @@ export function Withdraw() {
   const [walletAddress, setWalletAddress] = useState("");
   const [network, setNetwork] = useState("TRC20");
   const [note, setNote] = useState("");
-  const [twoFactorCode, setTwoFactorCode] = useState("");
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
   const [history, setHistory] = useState<Transaction[]>([]);
@@ -81,13 +80,11 @@ export function Withdraw() {
         wallet_address: walletAddress.trim(),
         network,
         note: note.trim() || null,
-        two_factor_code: twoFactorCode || null,
       });
       setAccountName("Wallet");
       setAmount("");
       setWalletAddress("");
       setNote("");
-      setTwoFactorCode("");
       await refresh();
       await loadHistory();
     } catch (err) {
@@ -198,11 +195,6 @@ export function Withdraw() {
               placeholder="Memo, beneficiary name, or extra details"
               onChange={(e) => setNote(e.target.value)}
             />
-          </label>
-
-          <label>
-            Authenticator code <span className="muted">(required when 2FA is enabled)</span>
-            <input className="input" inputMode="numeric" autoComplete="one-time-code" maxLength={6} value={twoFactorCode} placeholder="6-digit code" onChange={(e) => setTwoFactorCode(e.target.value)} />
           </label>
 
           <p className="muted">Basic Funded withdrawals unlock at $700. Pro Funded withdrawals unlock at $1,500. Withdrawals will be received within 24-48 hours.</p>
