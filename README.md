@@ -1,1 +1,2 @@
-# tradeify-frontend
+# TradeXBot frontend
+# tradexbot-frontend
