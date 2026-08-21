@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { api } from "../api/client";
 import type { ReferralSummary } from "../types";
 
-const money = (n: number) => `$${Number(n).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+const money = (n: number) => `$${Number(n).toLocaleString(undefined, { maximumFractionDigits: 2 })}`;
 
 export function Referrals() {
   const [summary, setSummary] = useState<ReferralSummary | null>(null);
@@ -23,30 +23,34 @@ export function Referrals() {
   }
 
   return (
-    <div>
-      <h1>Refer & earn</h1>
-      <p className="muted">Share your link — earn a bonus for every friend who joins TradeXBot.</p>
+    <div className="workspace-page workspace-page--referrals">
+      <section className="workspace-hero workspace-hero--referrals">
+        <div>
+          <p className="workspace-hero__eyebrow">Referral Program</p>
+          <h1>Refer & earn</h1>
+          <p className="muted">Share your link and earn a bonus for every friend who joins TradeXBot.</p>
+        </div>
+      </section>
 
-      <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap", margin: "1.5rem 0" }}>
-        <div className="card" style={{ flex: 1, minWidth: 200 }}>
-          <div className="muted" style={{ fontSize: "0.85rem" }}>Total referrals</div>
-          <div className="gradient-text" style={{ fontSize: "1.9rem", fontWeight: 800 }}>
+      <section className="workspace-stats-grid">
+        <div className="card workspace-stat-card">
+          <div className="muted workspace-stat-card__label">Total referrals</div>
+          <div className="gradient-text workspace-stat-card__value">
             {summary.total_referrals}
           </div>
         </div>
-        <div className="card" style={{ flex: 1, minWidth: 200 }}>
-          <div className="muted" style={{ fontSize: "0.85rem" }}>Bonus earned</div>
-          <div className="gradient-text" style={{ fontSize: "1.9rem", fontWeight: 800 }}>
+        <div className="card workspace-stat-card">
+          <div className="muted workspace-stat-card__label">Bonus earned</div>
+          <div className="gradient-text workspace-stat-card__value">
             {money(summary.total_bonus)}
           </div>
         </div>
-      </div>
+      </section>
 
-      <div className="card">
+      <section className="card workspace-panel">
         <h3>Your referral link</h3>
-        <div style={{ display: "flex", gap: "0.6rem", alignItems: "center", flexWrap: "wrap" }}>
-          <code style={{ flex: 1, minWidth: 240, padding: "0.6rem 0.8rem", background: "#0e231f",
-            borderRadius: 8, border: "1px solid var(--border)", overflowX: "auto" }}>
+        <div className="referral-link-row">
+          <code className="referral-link-row__code">
             {link}
           </code>
           <button className="btn" onClick={copy}>{copied ? "Copied!" : "Copy link"}</button>
@@ -56,7 +60,8 @@ export function Referrals() {
         {summary.referred_users.length === 0 ? (
           <p className="muted">No referrals yet. Share your link to start earning.</p>
         ) : (
-          <table>
+          <div className="workspace-table-wrap">
+            <table>
             <thead><tr><th>Name</th><th>Email</th><th>Bonus</th></tr></thead>
             <tbody>
               {summary.referred_users.map((u, i) => (
@@ -67,9 +72,10 @@ export function Referrals() {
                 </tr>
               ))}
             </tbody>
-          </table>
+            </table>
+          </div>
         )}
-      </div>
+      </section>
     </div>
   );
 }

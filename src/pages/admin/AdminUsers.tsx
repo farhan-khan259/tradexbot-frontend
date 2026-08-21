@@ -4,7 +4,7 @@ import { api, apiError } from "../../api/client";
 import type { User } from "../../types";
 
 const money = (n: number) =>
-  `$${Number(n).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+  `$${Number(n).toLocaleString(undefined, { maximumFractionDigits: 2 })}`;
 
 export function AdminUsers() {
   const [users, setUsers] = useState<User[]>([]);

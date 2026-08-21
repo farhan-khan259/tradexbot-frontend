@@ -16,7 +16,7 @@ const PRESET_AMOUNTS = [50, 100, 500, 1000, 5000];
 const WALLET_ADDRESS = "TFEnwGWNtPo7c5i6X681hnCuLwZhJFvfza";
 
 const money = (n: number) =>
-  `$${Number(n).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+  `$${Number(n).toLocaleString(undefined, { maximumFractionDigits: 2 })}`;
 
 const depositDate = (value: string) =>
   new Date(value).toLocaleDateString(undefined, { day: "2-digit", month: "short", year: "numeric" });
@@ -127,8 +127,8 @@ export function Deposit() {
   }
 
   return (
-    <div className="deposit-page">
-      <section className="deposit-hero">
+    <div className="deposit-page workspace-page workspace-page--deposit">
+      <section className="deposit-hero workspace-hero workspace-hero--deposit">
         <div className="deposit-hero__icon">
           <ArrowDownToLine size={24} />
         </div>
@@ -142,7 +142,7 @@ export function Deposit() {
         </div>
       </section>
 
-      <section className="card deposit-card">
+      <section className="card deposit-card workspace-panel">
         <div className="deposit-steps">
           {[1, 2, 3].map((item) => {
             const isDone = item < step;
@@ -339,7 +339,7 @@ export function Deposit() {
         )}
       </section>
 
-      <section className="card deposit-history-card">
+      <section className="card deposit-history-card workspace-panel">
         <div className="deposit-history-header">
           <div>
             <h2>Deposit History</h2>

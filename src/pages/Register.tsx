@@ -38,14 +38,30 @@ export function Register() {
   }
 
   return (
-    <div style={{ display: "grid", placeItems: "center", minHeight: "100vh", padding: "1rem", background: "radial-gradient(circle at top, rgba(63,141,117,0.16), transparent 30%), #081311" }}>
-      <div className="card" style={{ width: "100%", maxWidth: 420, background: "linear-gradient(180deg, rgba(12, 25, 22, 0.98), rgba(10, 18, 17, 0.96))", border: "1px solid rgba(168, 221, 204, 0.2)" }}>
-        <div style={{ marginBottom: "1.5rem" }}>
-          <Logo size={44} />
+    <div className="auth-shell">
+      <section className="auth-panel auth-panel--story">
+        <Logo size={50} />
+        <p className="auth-panel__eyebrow">Create Account</p>
+        <h1>Start your professional trading setup in minutes.</h1>
+        <p className="muted">
+          Build your profile, fund your wallet, and unlock AI bot strategies through one dashboard.
+        </p>
+        <div className="auth-story-grid">
+          <article className="auth-story-card">
+            <strong>Fast onboarding</strong>
+            <span>Simple registration with referral support built in.</span>
+          </article>
+          <article className="auth-story-card">
+            <strong>Portfolio control</strong>
+            <span>Track transactions, profits, and payouts from day one.</span>
+          </article>
         </div>
+      </section>
+
+      <section className="card auth-panel auth-panel--form">
         <h2>Create your account</h2>
-        <p className="muted" style={{ marginTop: 0 }}>Start your trading journey with TradeXBot</p>
-        <form onSubmit={onSubmit} style={{ marginTop: "1.2rem" }}>
+        <p className="muted">Start your trading journey with TradeXBot</p>
+        <form onSubmit={onSubmit} className="auth-form">
           <label>
             Full name
             <input className="input" value={fullName} required minLength={2}
@@ -78,14 +94,14 @@ export function Register() {
               onChange={(e) => setReferral(e.target.value.toUpperCase())} />
           </label>
           {error && <p className="error">{error}</p>}
-          <button className="btn" style={{ width: "100%", marginTop: "0.5rem" }} disabled={busy}>
+          <button className="btn auth-form__submit" disabled={busy}>
             {busy ? "Creating…" : "Create account"}
           </button>
         </form>
-        <p className="muted" style={{ marginTop: "1.2rem", textAlign: "center" }}>
+        <p className="muted auth-form__footer">
           Already have an account? <Link to="/login">Sign in</Link>
         </p>
-      </div>
+      </section>
     </div>
   );
 }

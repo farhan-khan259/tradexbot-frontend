@@ -10,77 +10,39 @@ import {
   Smile,
   TrendingUp,
 } from "lucide-react";
-import { fetchLiveMarketPrices } from "../api/market";
+import { fetchMarketCandles, type MarketCandle } from "../api/market";
 
-interface Candle {
-  o: number;
-  h: number;
-  l: number;
-  c: number;
-  v: number;
-}
-
-const COUNT = 44;
-const TIMEFRAMES = ["1m", "30m", "1h"];
-
-function nextCandle(prevClose: number): Candle {
-  const o = prevClose;
-  const move = (Math.random() - 0.46) * prevClose * 0.028;
-  const c = Math.max(prevClose * 0.92, o + move);
-  const h = Math.max(o, c) + Math.random() * prevClose * 0.008;
-  const l = Math.min(o, c) - Math.random() * prevClose * 0.008;
-  const v = 12 + Math.random() * 88;
-  return { o, h, l, c, v };
-}
-
-function seed(start = 61500): Candle[] {
-  const output: Candle[] = [];
-  let prev = start;
-  for (let i = 0; i < COUNT; i++) {
-    const candle = nextCandle(prev);
-    output.push(candle);
-    prev = candle.c;
-  }
-  return output;
-}
+const TIMEFRAMES = ["1m", "5m", "15m", "30m", "1h", "4h", "1d"];
 
 const fmt = (n: number) => n.toLocaleString(undefined, { maximumFractionDigits: 0 });
 
 export function CandleChart() {
   const [timeframe, setTimeframe] = useState("1h");
-  const [data, setData] = useState<Candle[]>(() => seed());
+  const [data, setData] = useState<MarketCandle[]>([]);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     let mounted = true;
     const controller = new AbortController();
 
-    const syncFromLivePrice = async () => {
+    const load = async () => {
       try {
-        const live = await fetchLiveMarketPrices(controller.signal);
-        const btc = live.find((coin) => coin.symbol === "BTC");
-        if (mounted && btc?.price) {
-          setData(seed(btc.price));
-        }
+        const candles = await fetchMarketCandles("BTC", timeframe, controller.signal);
+        if (mounted) { setData(candles); setError(""); }
       } catch {
-        // Keep seeded data when the live source is unavailable.
+        if (mounted) setError("Market data unavailable");
       }
     };
 
-    void syncFromLivePrice();
+    void load();
+    const interval = window.setInterval(load, 15_000);
 
     return () => {
       mounted = false;
       controller.abort();
+      window.clearInterval(interval);
     };
-  }, []);
-
-  useEffect(() => {
-    const id = window.setInterval(() => {
-      setData((prev) => [...prev.slice(1), nextCandle(prev[prev.length - 1].c)]);
-    }, 1800);
-
-    return () => window.clearInterval(id);
-  }, []);
+  }, [timeframe]);
 
   const W = 760;
   const H = 430;
@@ -91,13 +53,13 @@ export function CandleChart() {
   const volumeHeight = 65;
   const chartBottom = H - bottomPad - volumeHeight;
 
-  const max = Math.max(...data.map((d) => d.h));
-  const min = Math.min(...data.map((d) => d.l));
+  const max = data.length ? Math.max(...data.map((d) => d.h)) : 1;
+  const min = data.length ? Math.min(...data.map((d) => d.l)) : 0;
   const range = max - min || 1;
   const y = (v: number) => topPad + (1 - (v - min) / range) * (chartBottom - topPad);
   const slot = (W - rightPad - leftPad) / data.length;
   const bodyW = Math.max(5, slot * 0.58);
-  const last = data[data.length - 1];
+  const last = data[data.length - 1] ?? { o: 0, h: 0, l: 0, c: 0, v: 0, time: 0 };
   const up = last.c >= last.o;
 
   const gridLevels = 6;
@@ -123,7 +85,6 @@ export function CandleChart() {
               className={`tv-toolbar__pill ${item === timeframe ? "is-active" : ""}`}
               onClick={() => {
                 setTimeframe(item);
-                setData(seed());
               }}
             >
               {item}
@@ -165,6 +126,7 @@ export function CandleChart() {
               O{fmt(last.o)} H{fmt(last.h)} L{fmt(last.l)} C{fmt(last.c)} {up ? "+" : "-"}{fmt(Math.abs(last.c - last.o))}
             </div>
           </div>
+          {error && <div className="tv-chart-error">{error}</div>}
 
           <svg viewBox={`0 0 ${W} ${H}`} width="100%" preserveAspectRatio="none" className="tv-chart-svg">
             <rect x="0" y="0" width={W} height={H} fill="#0c201c" />

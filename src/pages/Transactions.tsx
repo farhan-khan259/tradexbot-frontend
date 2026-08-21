@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { api } from "../api/client";
 import type { Transaction } from "../types";
 
-const money = (n: number) => `$${Number(n).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+const money = (n: number) => `$${Number(n).toLocaleString(undefined, { maximumFractionDigits: 2 })}`;
 
 export function Transactions() {
   const [txns, setTxns] = useState<Transaction[]>([]);
@@ -15,16 +15,23 @@ export function Transactions() {
   }, []);
 
   return (
-    <div>
-      <h1>Transaction history</h1>
-      <p className="muted">All your deposits, withdrawals, and referral bonuses.</p>
-      <div className="card" style={{ marginTop: "1.5rem" }}>
+    <div className="workspace-page workspace-page--transactions">
+      <section className="workspace-hero workspace-hero--transactions">
+        <div>
+          <p className="workspace-hero__eyebrow">Account Ledger</p>
+          <h1>Transaction history</h1>
+          <p className="muted">All your deposits, withdrawals, and referral bonuses.</p>
+        </div>
+      </section>
+
+      <section className="card workspace-panel">
         {loading ? (
           <p className="muted">Loading…</p>
         ) : txns.length === 0 ? (
           <p className="muted">No transactions yet.</p>
         ) : (
-          <table>
+          <div className="workspace-table-wrap">
+            <table>
             <thead>
               <tr><th>ID</th><th>Type</th><th>Amount</th><th>Status</th><th>Note</th><th>Date</th></tr>
             </thead>
@@ -40,9 +47,10 @@ export function Transactions() {
                 </tr>
               ))}
             </tbody>
-          </table>
+            </table>
+          </div>
         )}
-      </div>
+      </section>
     </div>
   );
 }

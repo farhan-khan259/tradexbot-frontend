@@ -56,7 +56,7 @@ const DURATIONS = [
 ];
 
 const money = (n: number) =>
-  `$${Number(n).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+  `$${Number(n).toLocaleString(undefined, { maximumFractionDigits: 2 })}`;
 
 function pad(n: number) {
   return n.toString().padStart(2, "0");
@@ -411,12 +411,19 @@ export function AIBot({ title = "Free AI Trading Bot", variant = "standard" }: {
   }[status];
 
   return (
-    <div className={`bot-page bot-page--sim bot-page--${variant}`}>
-      <div className={`bot-shell bot-shell--${variant}`}>
-        <h1 className="bot-shell__title">{title}</h1>
+    <div className={`bot-page bot-page--sim bot-page--${variant} workspace-page workspace-page--bot`}>
+      <section className="workspace-hero workspace-hero--bot">
+        <div>
+          <p className="workspace-hero__eyebrow">AI Trading Desk</p>
+          <h1 className="bot-shell__title">{title}</h1>
+          <p className="muted">Configure a session, monitor execution, and track outcomes in real time.</p>
+        </div>
+      </section>
+
+      <div className={`bot-shell bot-shell--${variant} bot-shell--workspace`}>
 
         {accountType !== "wallet" && (
-          <section className="bot-funded-balance" aria-label={`${accountType === "basic-funded" ? "Basic" : "Pro"} funded account balance`}>
+          <section className="bot-funded-balance workspace-panel" aria-label={`${accountType === "basic-funded" ? "Basic" : "Pro"} funded account balance`}>
             <div className="bot-funded-balance__label">{accountType === "basic-funded" ? "Basic Funded Balance" : "Pro Funded Balance"}</div>
             <div className="bot-funded-balance__amount">{money(currentBalance)}</div>
             <div className="bot-funded-balance__note">Available for funded trades only</div>
@@ -598,7 +605,7 @@ export function AIBot({ title = "Free AI Trading Bot", variant = "standard" }: {
               <Wallet size={15} />
             </div>
               <div className="bot-label">{accountType === "wallet" ? "Wallet Balance" : "Funded Balance"}</div>
-            <strong>{money(currentBalance).replace(".00", "")}</strong>
+            <strong>{money(currentBalance)}</strong>
           </article>
 
           <article className="card bot-stat-card">

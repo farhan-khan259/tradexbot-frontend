@@ -24,17 +24,23 @@ export function ForgotPassword() {
   }
 
   return (
-    <div style={{ display: "grid", placeItems: "center", minHeight: "100vh", padding: "1rem", background: "radial-gradient(circle at top, rgba(63,141,117,0.16), transparent 30%), #081311" }}>
-      <div className="card" style={{ width: "100%", maxWidth: 420, background: "linear-gradient(180deg, rgba(12, 25, 22, 0.98), rgba(10, 18, 17, 0.96))", border: "1px solid rgba(168, 221, 204, 0.2)" }}>
-        <div style={{ marginBottom: "1.5rem" }}>
-          <Logo size={44} />
-        </div>
+    <div className="auth-shell">
+      <section className="auth-panel auth-panel--story">
+        <Logo size={50} />
+        <p className="auth-panel__eyebrow">Account Recovery</p>
+        <h1>Reset your password and get back to trading quickly.</h1>
+        <p className="muted">
+          We will send a one-time code to your email so you can securely set a new password.
+        </p>
+      </section>
+
+      <section className="card auth-panel auth-panel--form">
         <h2>Forgot password</h2>
-        <p className="muted" style={{ marginTop: 0 }}>
+        <p className="muted">
           Enter your email and we&apos;ll send a one-time password to reset your account.
         </p>
 
-        <form onSubmit={onSubmit} style={{ marginTop: "1.2rem" }}>
+        <form onSubmit={onSubmit} className="auth-form">
           <label>
             Email
             <input
@@ -46,14 +52,14 @@ export function ForgotPassword() {
             />
           </label>
           {error && <p className="error">{error}</p>}
-          <button className="btn" style={{ width: "100%", marginTop: "0.5rem" }} disabled={busy}>
+          <button className="btn auth-form__submit" disabled={busy}>
             {busy ? "Sending..." : "Send OTP"}
           </button>
-          <p className="muted" style={{ marginTop: "1.2rem", textAlign: "center" }}>
+          <p className="muted auth-form__footer">
             Remembered it? <Link to="/login">Sign in</Link>
           </p>
         </form>
-      </div>
+      </section>
     </div>
   );
 }

@@ -25,6 +25,13 @@ import { AdminDashboard } from "./pages/admin/AdminDashboard";
 import { AdminUsers } from "./pages/admin/AdminUsers";
 import { AdminDeposits } from "./pages/admin/AdminDeposits";
 import { AdminWithdrawals } from "./pages/admin/AdminWithdrawals";
+import { AdminNotifications } from "./pages/admin/AdminNotifications";
+import { AdminKYC } from "./pages/admin/AdminKYC";
+import { AdminAudit } from "./pages/admin/AdminAudit";
+import { TradeHistory } from "./pages/TradeHistory";
+import { Notifications } from "./pages/Notifications";
+import { KYC } from "./pages/KYC";
+import { Security } from "./pages/Security";
 
 function Shell({ children }: { children: React.ReactNode }) {
   return (
@@ -67,7 +74,11 @@ export default function App() {
       <Route path="/bot/basic-bot" element={<Shell><PaidBotRoute botId="basic-bot" name="Basic AI Trading Bot" price={30} accuracy={75}><BasicBotAIBot /></PaidBotRoute></Shell>} />
       <Route path="/bot/pro-bot" element={<Shell><PaidBotRoute botId="pro-bot" name="Pro AI Trading Bot" price={60} accuracy={90}><ProBotAIBot /></PaidBotRoute></Shell>} />
       <Route path="/transactions" element={<Shell><Transactions /></Shell>} />
+      <Route path="/trades" element={<Shell><TradeHistory /></Shell>} />
       <Route path="/referrals" element={<Shell><Referrals /></Shell>} />
+      <Route path="/notifications" element={<Shell><Notifications /></Shell>} />
+      <Route path="/kyc" element={<Shell><KYC /></Shell>} />
+      <Route path="/security" element={<Shell><Security /></Shell>} />
 
       {/* Admin area (separate login + guard) */}
       <Route path="/admin/login" element={<AdminLogin />} />
@@ -75,6 +86,9 @@ export default function App() {
       <Route path="/admin/users" element={<AdminShell><AdminUsers /></AdminShell>} />
       <Route path="/admin/deposits" element={<AdminShell><AdminDeposits /></AdminShell>} />
       <Route path="/admin/withdrawals" element={<AdminShell><AdminWithdrawals /></AdminShell>} />
+      <Route path="/admin/notifications" element={<AdminShell><AdminNotifications /></AdminShell>} />
+      <Route path="/admin/kyc" element={<AdminShell><AdminKYC /></AdminShell>} />
+      <Route path="/admin/audit" element={<AdminShell><AdminAudit /></AdminShell>} />
 
       <Route path="*" element={<Navigate to="/dashboard" replace />} />
     </Routes>

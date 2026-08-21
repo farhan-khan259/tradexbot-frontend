@@ -11,7 +11,7 @@ interface LockedBotProps {
   fundedCredit?: number;
 }
 
-const dollars = (value: number) => `$${value.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+const dollars = (value: number) => `$${value.toLocaleString(undefined, { maximumFractionDigits: 2 })}`;
 
 export function LockedBot({ botId, name, price, accuracy, fundedCredit }: LockedBotProps) {
   const { user, updateBalance, updateFundedBalance, updatePurchasedBots } = useAuth();

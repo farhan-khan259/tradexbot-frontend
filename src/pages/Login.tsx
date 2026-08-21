@@ -10,6 +10,8 @@ export function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [twoFactorCode, setTwoFactorCode] = useState("");
+  const [requiresTwoFactor, setRequiresTwoFactor] = useState(false);
   const [busy, setBusy] = useState(false);
 
   async function onSubmit(e: FormEvent) {
@@ -17,24 +19,42 @@ export function Login() {
     setError("");
     setBusy(true);
     try {
-      await login(email, password);
+      await login(email, password, twoFactorCode || undefined);
       navigate("/dashboard");
     } catch (err) {
-      setError(apiError(err, "Invalid credentials"));
+      const message = apiError(err, "Invalid credentials");
+      setError(message);
+      if (message.toLowerCase().includes("two-factor")) setRequiresTwoFactor(true);
     } finally {
       setBusy(false);
     }
   }
 
   return (
-    <div style={{ display: "grid", placeItems: "center", minHeight: "100vh", padding: "1rem", background: "radial-gradient(circle at top, rgba(63,141,117,0.16), transparent 30%), #081311" }}>
-      <div className="card" style={{ width: "100%", maxWidth: 420, background: "linear-gradient(180deg, rgba(12, 25, 22, 0.98), rgba(10, 18, 17, 0.96))", border: "1px solid rgba(168, 221, 204, 0.2)" }}>
-        <div style={{ marginBottom: "1.5rem" }}>
-          <Logo size={44} />
+    <div className="auth-shell">
+      <section className="auth-panel auth-panel--story">
+        <Logo size={50} />
+        <p className="auth-panel__eyebrow">Secure Access</p>
+        <h1>Welcome back to your trading workspace.</h1>
+        <p className="muted">
+          Monitor positions, manage funds, and run your AI bot sessions from one place.
+        </p>
+        <div className="auth-story-grid">
+          <article className="auth-story-card">
+            <strong>Live data</strong>
+            <span>Track market activity with real-time account updates.</span>
+          </article>
+          <article className="auth-story-card">
+            <strong>Protected account</strong>
+            <span>Two-factor sign-in and secure request validation.</span>
+          </article>
         </div>
+      </section>
+
+      <section className="card auth-panel auth-panel--form">
         <h2>Welcome back</h2>
-        <p className="muted" style={{ marginTop: 0 }}>Sign in to your TradeXBot account</p>
-        <form onSubmit={onSubmit} style={{ marginTop: "1.2rem" }}>
+        <p className="muted">Sign in to your TradeXBot account</p>
+        <form onSubmit={onSubmit} className="auth-form">
           <label>
             Email
             <input className="input" type="email" value={email} required
@@ -45,18 +65,19 @@ export function Login() {
             <input className="input" type="password" value={password} required
               onChange={(e) => setPassword(e.target.value)} />
           </label>
+          {requiresTwoFactor && <label>Authenticator code<input className="input" inputMode="numeric" autoComplete="one-time-code" value={twoFactorCode} required onChange={(e) => setTwoFactorCode(e.target.value)} /></label>}
           {error && <p className="error">{error}</p>}
-          <div style={{ textAlign: "right", marginBottom: "0.6rem" }}>
+          <div className="auth-form__meta">
             <Link to="/forgot-password" style={{ fontSize: "0.85rem" }}>Forgot password?</Link>
           </div>
-          <button className="btn" style={{ width: "100%", marginTop: "0.5rem" }} disabled={busy}>
+          <button className="btn auth-form__submit" disabled={busy}>
             {busy ? "Signing in…" : "Sign in"}
           </button>
         </form>
-        <p className="muted" style={{ marginTop: "1.2rem", textAlign: "center" }}>
+        <p className="muted auth-form__footer">
           New here? <Link to="/register">Create an account</Link>
         </p>
-      </div>
+      </section>
     </div>
   );
 }

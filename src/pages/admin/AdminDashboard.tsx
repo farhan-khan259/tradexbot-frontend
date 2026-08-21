@@ -7,7 +7,7 @@ import { api } from "../../api/client";
 import type { AdminStats } from "../../types";
 
 const money = (n: number) =>
-  `$${Number(n).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+  `$${Number(n).toLocaleString(undefined, { maximumFractionDigits: 2 })}`;
 
 function StatCard({
   label, value, Icon, accent, to,

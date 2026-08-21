@@ -56,7 +56,6 @@ export function MarketTicker() {
               <span className="dashboard-ticker__coin-symbol">{coin.symbol}</span>
               <strong>
                 ${coin.price.toLocaleString(undefined, {
-                  minimumFractionDigits: 2,
                   maximumFractionDigits: 2,
                 })}
               </strong>

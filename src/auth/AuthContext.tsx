@@ -5,7 +5,7 @@ import type { User } from "../types";
 interface AuthState {
   user: User | null;
   loading: boolean;
-  login: (email: string, password: string) => Promise<User | null>;
+  login: (email: string, password: string, twoFactorCode?: string) => Promise<User | null>;
   register: (data: RegisterData) => Promise<User | null>;
   logout: () => void;
   refresh: () => Promise<User | null>;
@@ -44,12 +44,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     refresh().finally(() => setLoading(false));
   }, []);
 
-  async function login(email: string, password: string) {
+  async function login(email: string, password: string, twoFactorCode?: string) {
     // OAuth2 password flow expects form-encoded username/password.
     const form = new URLSearchParams();
     form.append("username", email);
     form.append("password", password);
-    const { data } = await api.post("/auth/login", form);
+    const { data } = await api.post("/auth/login", form, { params: twoFactorCode ? { two_factor_code: twoFactorCode } : undefined });
     setToken(data.access_token);
     return await refresh();
   }

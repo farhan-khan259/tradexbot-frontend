@@ -21,7 +21,7 @@ const BOTS: TradingBot[] = [
   { id: "pro-bot", name: "Pro Bot", price: 60, path: "/bot/pro-bot", description: "The full AI bot experience for active traders." },
 ];
 
-const dollars = (value: number) => `$${value.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+const dollars = (value: number) => `$${value.toLocaleString(undefined, { maximumFractionDigits: 2 })}`;
 
 export function BotMarketplace() {
   const navigate = useNavigate();

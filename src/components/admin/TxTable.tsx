@@ -3,7 +3,7 @@ import { useState } from "react";
 import type { Transaction } from "../../types";
 
 const money = (n: number) =>
-  `$${Number(n).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+  `$${Number(n).toLocaleString(undefined, { maximumFractionDigits: 2 })}`;
 
 interface Props {
   rows: Transaction[];

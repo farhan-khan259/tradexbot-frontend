@@ -19,6 +19,7 @@ const iconFor = (symbol: string) => {
 
 export function MarketOverview() {
   const [coins, setCoins] = useState<MarketCoin[]>(MARKET_FALLBACK);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     let mounted = true;
@@ -28,8 +29,9 @@ export function MarketOverview() {
       try {
         const live = await fetchLiveMarketPrices(controller.signal);
         if (mounted) setCoins(live);
+        if (mounted) setError("");
       } catch {
-        // Keep last known data if live feed is temporarily unavailable.
+        if (mounted) setError("Market data unavailable");
       }
     };
 
@@ -45,6 +47,8 @@ export function MarketOverview() {
 
   return (
     <div className="dashboard-market-list">
+      {error && <p className="muted">{error}</p>}
+      {!error && coins.length === 0 && <p className="muted">Connecting to market data...</p>}
       {coins.map((coin, index) => (
         <div key={coin.symbol} className={`dashboard-market-row ${index < coins.length - 1 ? "has-border" : ""}`}>
           <div className={`dashboard-market-row__icon dashboard-market-row__icon--${coin.symbol.toLowerCase()}`}>

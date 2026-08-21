@@ -6,7 +6,7 @@ import { TxTable } from "./TxTable";
 type Tab = "pending" | "completed";
 
 const money = (n: number) =>
-  `$${Number(n).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+  `$${Number(n).toLocaleString(undefined, { maximumFractionDigits: 2 })}`;
 
 export function TransactionManager({
   type,
