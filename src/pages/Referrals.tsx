@@ -25,7 +25,7 @@ export function Referrals() {
   return (
     <div>
       <h1>Refer & earn</h1>
-      <p className="muted">Share your link — earn a bonus for every friend who joins Tradeify.</p>
+      <p className="muted">Share your link — earn a bonus for every friend who joins TradeXBot.</p>
 
       <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap", margin: "1.5rem 0" }}>
         <div className="card" style={{ flex: 1, minWidth: 200 }}>
@@ -45,7 +45,7 @@ export function Referrals() {
       <div className="card">
         <h3>Your referral link</h3>
         <div style={{ display: "flex", gap: "0.6rem", alignItems: "center", flexWrap: "wrap" }}>
-          <code style={{ flex: 1, minWidth: 240, padding: "0.6rem 0.8rem", background: "#0b1d35",
+          <code style={{ flex: 1, minWidth: 240, padding: "0.6rem 0.8rem", background: "#0e231f",
             borderRadius: 8, border: "1px solid var(--border)", overflowX: "auto" }}>
             {link}
           </code>

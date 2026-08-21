@@ -11,6 +11,7 @@ export function Register() {
 
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
   const [referral, setReferral] = useState(params.get("ref") ?? "");
   const [error, setError] = useState("");
@@ -24,6 +25,7 @@ export function Register() {
       await register({
         full_name: fullName,
         email,
+        phone,
         password,
         referral_code: referral || undefined,
       });
@@ -36,13 +38,13 @@ export function Register() {
   }
 
   return (
-    <div style={{ display: "grid", placeItems: "center", minHeight: "100vh", padding: "1rem" }}>
-      <div className="card" style={{ width: "100%", maxWidth: 420 }}>
+    <div style={{ display: "grid", placeItems: "center", minHeight: "100vh", padding: "1rem", background: "radial-gradient(circle at top, rgba(63,141,117,0.16), transparent 30%), #081311" }}>
+      <div className="card" style={{ width: "100%", maxWidth: 420, background: "linear-gradient(180deg, rgba(12, 25, 22, 0.98), rgba(10, 18, 17, 0.96))", border: "1px solid rgba(168, 221, 204, 0.2)" }}>
         <div style={{ marginBottom: "1.5rem" }}>
           <Logo size={44} />
         </div>
         <h2>Create your account</h2>
-        <p className="muted" style={{ marginTop: 0 }}>Start your trading journey with Tradeify</p>
+        <p className="muted" style={{ marginTop: 0 }}>Start your trading journey with TradeXBot</p>
         <form onSubmit={onSubmit} style={{ marginTop: "1.2rem" }}>
           <label>
             Full name
@@ -53,6 +55,17 @@ export function Register() {
             Email
             <input className="input" type="email" value={email} required
               onChange={(e) => setEmail(e.target.value)} />
+          </label>
+          <label>
+            Phone number
+            <input
+              className="input"
+              type="tel"
+              value={phone}
+              placeholder="+1 234 567 8900"
+              required
+              onChange={(e) => setPhone(e.target.value)}
+            />
           </label>
           <label>
             Password

@@ -4,7 +4,7 @@ const baseURL = import.meta.env.VITE_API_BASE_URL || "/api/v1";
 
 export const api = axios.create({ baseURL });
 
-const TOKEN_KEY = "tradeify_token";
+const TOKEN_KEY = "tradexbot_token";
 
 export function setToken(token: string | null) {
   if (token) localStorage.setItem(TOKEN_KEY, token);

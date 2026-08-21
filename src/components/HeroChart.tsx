@@ -62,12 +62,12 @@ export function HeroChart() {
       <svg viewBox={`0 0 ${W} ${H}`} width="100%" preserveAspectRatio="none" style={{ display: "block", height: "auto" }}>
         <defs>
           <linearGradient id="heroFill" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#22d3ee" stopOpacity="0.35" />
-            <stop offset="100%" stopColor="#2563eb" stopOpacity="0" />
+            <stop offset="0%" stopColor="#8de5c8" stopOpacity="0.35" />
+            <stop offset="100%" stopColor="#285d4b" stopOpacity="0" />
           </linearGradient>
           <linearGradient id="heroStroke" x1="0" y1="0" x2="1" y2="0">
-            <stop offset="0%" stopColor="#2563eb" />
-            <stop offset="100%" stopColor="#22d3ee" />
+            <stop offset="0%" stopColor="#285d4b" />
+            <stop offset="100%" stopColor="#8de5c8" />
           </linearGradient>
         </defs>
         <path d={area} fill="url(#heroFill)" style={{ transition: "all 0.6s ease" }} />
@@ -80,7 +80,7 @@ export function HeroChart() {
           strokeLinejoin="round"
           style={{ transition: "all 0.6s ease" }}
         />
-        <circle cx={x(data.length - 1)} cy={y(last)} r={4} fill="#22d3ee" style={{ transition: "all 0.6s ease" }} />
+        <circle cx={x(data.length - 1)} cy={y(last)} r={4} fill="#8de5c8" style={{ transition: "all 0.6s ease" }} />
       </svg>
     </div>
   );

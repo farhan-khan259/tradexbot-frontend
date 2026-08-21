@@ -46,8 +46,8 @@ export function ResetPassword() {
   }
 
   return (
-    <div style={{ display: "grid", placeItems: "center", minHeight: "100vh", padding: "1rem" }}>
-      <div className="card" style={{ width: "100%", maxWidth: 420 }}>
+    <div style={{ display: "grid", placeItems: "center", minHeight: "100vh", padding: "1rem", background: "radial-gradient(circle at top, rgba(63,141,117,0.16), transparent 30%), #081311" }}>
+      <div className="card" style={{ width: "100%", maxWidth: 420, background: "linear-gradient(180deg, rgba(12, 25, 22, 0.98), rgba(10, 18, 17, 0.96))", border: "1px solid rgba(168, 221, 204, 0.2)" }}>
         <div style={{ marginBottom: "1.5rem" }}>
           <Logo size={44} />
         </div>

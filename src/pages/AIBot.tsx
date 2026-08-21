@@ -49,10 +49,10 @@ interface BotTradeResponse {
 
 const PAIRS = ["XAU/USD (Gold)", "BTC/USD", "ETH/USD", "EUR/USD", "GBP/USD", "SOL/USD"];
 const DURATIONS = [
+  { label: "15 Seconds", seconds: 15 },
+  { label: "30 Seconds", seconds: 30 },
   { label: "1 Minute", seconds: 60 },
   { label: "5 Minutes", seconds: 300 },
-  { label: "15 Minutes", seconds: 900 },
-  { label: "1 Hour", seconds: 3600 },
 ];
 
 const money = (n: number) =>
@@ -85,7 +85,6 @@ export function AIBot({ title = "Free AI Trading Bot", variant = "standard" }: {
   const [wins, setWins] = useState(0);
   const [losses, setLosses] = useState(0);
   const [runPL, setRunPL] = useState(0);
-  const [sessions, setSessions] = useState(0);
   const [remaining, setRemaining] = useState(0);
   const [logs, setLogs] = useState<LogLine[]>([]);
   const [tradeStarted, setTradeStarted] = useState(false);
@@ -339,7 +338,6 @@ export function AIBot({ title = "Free AI Trading Bot", variant = "standard" }: {
     setLastTradeResult(null);
     setLogs([]);
     setRemaining(duration);
-    setSessions((prev) => prev + 1);
     setStatus("running");
     setTradeStarted(true);
     setPendingStake(amt);
@@ -401,6 +399,7 @@ export function AIBot({ title = "Free AI Trading Bot", variant = "standard" }: {
   }
 
   const total = wins + losses;
+  const sessions = total;
   const winRate = total ? Math.round((wins / total) * 100) : 0;
   const running = status === "running";
   const amountValue = Number(amount) || 0;
@@ -466,8 +465,8 @@ export function AIBot({ title = "Free AI Trading Bot", variant = "standard" }: {
                   <svg className="bot-countdown-timer__svg" viewBox="0 0 120 120">
                     <defs>
                       <linearGradient id="timerGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" stopColor="#20b6ff" />
-                        <stop offset="100%" stopColor="#18bbff" />
+                        <stop offset="0%" stopColor="#7dddbb" />
+                        <stop offset="100%" stopColor="#3f8d75" />
                       </linearGradient>
                     </defs>
                     <circle
@@ -637,7 +636,7 @@ export function AIBot({ title = "Free AI Trading Bot", variant = "standard" }: {
               <span className="amber" />
               <span className="green" />
             </div>
-            <span className="bot-terminal-card__prompt">crown@ai-engine:~$</span>
+            <span className="bot-terminal-card__prompt">tradexbot@ai-engine:~$</span>
             <span className="bot-terminal-card__lines">{logs.length} lines</span>
           </div>
 

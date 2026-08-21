@@ -18,6 +18,7 @@ interface AuthState {
 interface RegisterData {
   email: string;
   full_name: string;
+  phone?: string;
   password: string;
   referral_code?: string;
 }

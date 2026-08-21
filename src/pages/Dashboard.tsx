@@ -87,9 +87,9 @@ export function Dashboard() {
         </div>
 
         <div className="dashboard-subaccounts">
-          <SubAccount label="Spot" value={balance} color="#14b8ff" />
-          <SubAccount label="Trading" value={0} color="#22d56f" />
-          <SubAccount label="Bot" value={0} color="#a855f7" />
+          <SubAccount label="Spot" value={balance} color="#7dddbb" />
+          <SubAccount label="Trading" value={0} color="#62e2a0" />
+          <SubAccount label="Bot" value={0} color="#c4e8da" />
         </div>
 
         <div className="dashboard-actions">

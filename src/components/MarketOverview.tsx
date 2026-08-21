@@ -1,21 +1,6 @@
 import { useEffect, useState } from "react";
 import { Bitcoin, Coins, Droplets } from "lucide-react";
-
-interface Coin {
-  symbol: string;
-  name: string;
-  price: number;
-  change: number;
-}
-
-const SEED: Coin[] = [
-  { symbol: "BTC", name: "Bitcoin", price: 60123.96, change: -0.46 },
-  { symbol: "ETH", name: "Ethereum", price: 1576.67, change: -0.46 },
-  { symbol: "BNB", name: "BNB", price: 555.18, change: -1.54 },
-  { symbol: "SOL", name: "Solana", price: 71.54, change: -0.5 },
-  { symbol: "XRP", name: "XRP", price: 1.05, change: -1.05 },
-  { symbol: "ADA", name: "Cardano", price: 0.1448, change: -1.7 },
-];
+import { fetchLiveMarketPrices, MARKET_FALLBACK, type MarketCoin } from "../api/market";
 
 const fmt = (n: number) =>
   `$${n.toLocaleString(undefined, {
@@ -33,23 +18,29 @@ const iconFor = (symbol: string) => {
 };
 
 export function MarketOverview() {
-  const [coins, setCoins] = useState(SEED);
+  const [coins, setCoins] = useState<MarketCoin[]>(MARKET_FALLBACK);
 
   useEffect(() => {
-    const id = window.setInterval(() => {
-      setCoins((prev) =>
-        prev.map((coin) => {
-          const delta = (Math.random() - 0.58) * 0.18;
-          return {
-            ...coin,
-            price: coin.price * (1 + delta / 100),
-            change: coin.change + delta,
-          };
-        }),
-      );
-    }, 2600);
+    let mounted = true;
+    const controller = new AbortController();
 
-    return () => window.clearInterval(id);
+    const load = async () => {
+      try {
+        const live = await fetchLiveMarketPrices(controller.signal);
+        if (mounted) setCoins(live);
+      } catch {
+        // Keep last known data if live feed is temporarily unavailable.
+      }
+    };
+
+    void load();
+    const id = window.setInterval(load, 30_000);
+
+    return () => {
+      mounted = false;
+      controller.abort();
+      window.clearInterval(id);
+    };
   }, []);
 
   return (
@@ -68,7 +59,7 @@ export function MarketOverview() {
           <div className="dashboard-market-row__value">
             <strong>{fmt(coin.price)}</strong>
             <span className="dashboard-market-row__change">
-              {coin.change >= 0 ? "+" : ""}{coin.change.toFixed(2)}% ~ {coin.change >= 0 ? "+" : ""}{coin.change.toFixed(2)}%
+              {coin.change >= 0 ? "+" : ""}{coin.change.toFixed(2)}%
             </span>
           </div>
         </div>

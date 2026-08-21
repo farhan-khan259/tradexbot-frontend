@@ -63,8 +63,8 @@ export function Landing() {
           position: "sticky",
           top: 0,
           zIndex: 10,
-          backdropFilter: "blur(10px)",
-          background: "rgba(10, 22, 40, 0.7)",
+          backdropFilter: "blur(12px)",
+          background: "rgba(8, 19, 17, 0.7)",
           borderBottom: "1px solid var(--border)",
         }}
       >
@@ -107,16 +107,17 @@ export function Landing() {
                 gap: "0.4rem",
                 padding: "0.35rem 0.9rem",
                 borderRadius: 999,
-                border: "1px solid var(--border)",
-                color: "var(--muted)",
+                border: "1px solid rgba(168, 221, 204, 0.28)",
+                background: "rgba(40, 93, 75, 0.16)",
+                color: "var(--text)",
                 fontSize: "0.85rem",
                 marginBottom: "1.5rem",
               }}
             >
-              <Zap size={15} color="var(--accent)" /> Empowering Your Trading Journey
+              <Zap size={15} color="var(--background)" /> Empowering Your Trading Journey
             </div>
             <h1 style={{ fontSize: "clamp(2.2rem, 5vw, 3.4rem)", lineHeight: 1.1 }}>
-              Trade smartor with <span className="gradient-text">Tradeify</span>
+              Trade smarter with <span className="gradient-text">TradeXBot</span>
             </h1>
             <p className="muted" style={{ fontSize: "1.15rem", maxWidth: 520, margin: "1.2rem 0 2rem" }}>
               A clean, fast platform to grow and track your trading — real-time markets,
@@ -162,9 +163,9 @@ export function Landing() {
           }}
         >
           <div>
-            <h2 style={{ fontSize: "2rem" }}>About Tradeify</h2>
+            <h2 style={{ fontSize: "2rem" }}>About TradeXBot</h2>
             <p className="muted" style={{ fontSize: "1.05rem", lineHeight: 1.6 }}>
-              Tradeify is a modern trading platform built to make managing your portfolio simple
+              TradeXBot is a modern trading platform built to make managing your portfolio simple
               and transparent. From your first deposit to tracking every trade, we focus on a clean
               experience, real-time data, and tools that stay out of your way.
             </p>
@@ -267,12 +268,12 @@ export function Landing() {
           style={{
             textAlign: "center",
             padding: "3rem 1.5rem",
-            background: "linear-gradient(135deg, rgba(37,99,235,0.18), rgba(34,211,238,0.12))",
+            background: "linear-gradient(135deg, rgba(40,93,75,0.26), rgba(168,221,204,0.12))",
           }}
         >
           <h2 style={{ fontSize: "2rem" }}>Ready to begin your trading journey?</h2>
           <p className="muted" style={{ maxWidth: 480, margin: "0.5rem auto 1.8rem" }}>
-            Join Tradeify and take control of your trading today.
+            Join TradeXBot and take control of your trading today.
           </p>
           <Link to={primaryTo} className="btn" style={{ fontSize: "1.05rem", padding: "0.85rem 1.8rem" }}>
             {primaryLabel}
@@ -307,7 +308,7 @@ export function Landing() {
               </div>
               <div>
                 <div className="muted" style={{ fontSize: "0.82rem" }}>Email us</div>
-                <a href="mailto:support@tradeify.com" style={{ fontWeight: 600 }}>support@tradeify.com</a>
+                <a href="mailto:support@tradexbot.com" style={{ fontWeight: 600 }}>support@tradexbot.com</a>
               </div>
             </div>
             <div className="card">
@@ -326,7 +327,7 @@ export function Landing() {
         <Section style={{ padding: "2rem 1.5rem", display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: "1rem" }}>
           <Logo size={28} />
           <span className="muted" style={{ fontSize: "0.8rem" }}>
-            Trade smarter with real-time market insights. © {`${new Date().getFullYear()}`} Tradeify.
+            Trade smarter with real-time market insights. © {`${new Date().getFullYear()}`} TradeXBot.
           </span>
         </Section>
       </footer>

@@ -1,20 +1,6 @@
 import { useEffect, useState } from "react";
 import { Bitcoin, Coins, Droplets } from "lucide-react";
-
-interface Coin {
-  symbol: string;
-  price: number;
-  change: number;
-}
-
-const SEED: Coin[] = [
-  { symbol: "BTC", price: 60123.96, change: -0.46 },
-  { symbol: "ETH", price: 1576.67, change: -0.46 },
-  { symbol: "BNB", price: 555.18, change: -1.54 },
-  { symbol: "SOL", price: 71.54, change: -0.5 },
-  { symbol: "XRP", price: 1.05, change: -1.05 },
-  { symbol: "ADA", price: 0.1448, change: -1.7 },
-];
+import { fetchLiveMarketPrices, MARKET_FALLBACK, type MarketCoin } from "../api/market";
 
 const iconFor = (symbol: string) => {
   if (symbol === "BTC") return <Bitcoin size={12} />;
@@ -23,23 +9,29 @@ const iconFor = (symbol: string) => {
 };
 
 export function MarketTicker() {
-  const [coins, setCoins] = useState(SEED);
+  const [coins, setCoins] = useState<MarketCoin[]>(MARKET_FALLBACK);
 
   useEffect(() => {
-    const id = window.setInterval(() => {
-      setCoins((prev) =>
-        prev.map((coin) => {
-          const delta = (Math.random() - 0.58) * 0.22;
-          return {
-            ...coin,
-            price: coin.price * (1 + delta / 100),
-            change: coin.change + delta,
-          };
-        }),
-      );
-    }, 2200);
+    let mounted = true;
+    const controller = new AbortController();
 
-    return () => window.clearInterval(id);
+    const load = async () => {
+      try {
+        const live = await fetchLiveMarketPrices(controller.signal);
+        if (mounted) setCoins(live);
+      } catch {
+        // Keep last known data if live feed is temporarily unavailable.
+      }
+    };
+
+    void load();
+    const id = window.setInterval(load, 30_000);
+
+    return () => {
+      mounted = false;
+      controller.abort();
+      window.clearInterval(id);
+    };
   }, []);
 
   useEffect(() => {

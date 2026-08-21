@@ -10,6 +10,7 @@ import {
   Smile,
   TrendingUp,
 } from "lucide-react";
+import { fetchLiveMarketPrices } from "../api/market";
 
 interface Candle {
   o: number;
@@ -48,6 +49,30 @@ const fmt = (n: number) => n.toLocaleString(undefined, { maximumFractionDigits: 
 export function CandleChart() {
   const [timeframe, setTimeframe] = useState("1h");
   const [data, setData] = useState<Candle[]>(() => seed());
+
+  useEffect(() => {
+    let mounted = true;
+    const controller = new AbortController();
+
+    const syncFromLivePrice = async () => {
+      try {
+        const live = await fetchLiveMarketPrices(controller.signal);
+        const btc = live.find((coin) => coin.symbol === "BTC");
+        if (mounted && btc?.price) {
+          setData(seed(btc.price));
+        }
+      } catch {
+        // Keep seeded data when the live source is unavailable.
+      }
+    };
+
+    void syncFromLivePrice();
+
+    return () => {
+      mounted = false;
+      controller.abort();
+    };
+  }, []);
 
   useEffect(() => {
     const id = window.setInterval(() => {
@@ -142,14 +167,14 @@ export function CandleChart() {
           </div>
 
           <svg viewBox={`0 0 ${W} ${H}`} width="100%" preserveAspectRatio="none" className="tv-chart-svg">
-            <rect x="0" y="0" width={W} height={H} fill="#0d1423" />
+            <rect x="0" y="0" width={W} height={H} fill="#0c201c" />
 
             {priceTicks.map((tick, index) => {
               const yy = topPad + ((chartBottom - topPad) / (gridLevels - 1)) * index;
               return (
                 <g key={tick}>
-                  <line x1={leftPad} y1={yy} x2={W - rightPad} y2={yy} stroke="rgba(43,58,84,0.55)" strokeWidth="1" />
-                  <text x={W - rightPad + 10} y={yy + 4} fill="#8d9ab2" fontSize="11">
+                  <line x1={leftPad} y1={yy} x2={W - rightPad} y2={yy} stroke="rgba(57,95,84,0.55)" strokeWidth="1" />
+                  <text x={W - rightPad + 10} y={yy + 4} fill="#9ec6b7" fontSize="11">
                     {fmt(tick)}
                   </text>
                 </g>
@@ -165,7 +190,7 @@ export function CandleChart() {
                   y1={topPad}
                   x2={xx}
                   y2={chartBottom}
-                  stroke="rgba(27,39,61,0.42)"
+                  stroke="rgba(46,78,69,0.42)"
                   strokeWidth="1"
                 />
               );
@@ -174,7 +199,7 @@ export function CandleChart() {
             {data.map((candle, index) => {
               const cx = leftPad + slot * index + slot / 2;
               const green = candle.c >= candle.o;
-              const color = green ? "#16c7a2" : "#ff4d61";
+              const color = green ? "#66d6af" : "#ff6f82";
               const yO = y(candle.o);
               const yC = y(candle.c);
               const top = Math.min(yO, yC);
@@ -189,7 +214,7 @@ export function CandleChart() {
                     y={H - bottomPad - volHeight}
                     width={bodyW}
                     height={volHeight}
-                    fill={green ? "rgba(22,199,162,0.55)" : "rgba(255,77,97,0.55)"}
+                    fill={green ? "rgba(102,214,175,0.55)" : "rgba(255,111,130,0.55)"}
                   />
                 </g>
               );
@@ -200,11 +225,11 @@ export function CandleChart() {
               x2={W - rightPad}
               y1={y(last.c)}
               y2={y(last.c)}
-              stroke="rgba(255,77,97,0.65)"
+              stroke="rgba(255,111,130,0.65)"
               strokeDasharray="2 3"
             />
 
-            <rect x={W - rightPad + 2} y={y(last.c) - 9} width="50" height="18" rx="3" fill="#ff4d61" />
+            <rect x={W - rightPad + 2} y={y(last.c) - 9} width="50" height="18" rx="3" fill="#ff6f82" />
             <text x={W - rightPad + 27} y={y(last.c) + 4} fill="white" fontSize="11" textAnchor="middle">
               {fmt(last.c)}
             </text>
@@ -214,7 +239,7 @@ export function CandleChart() {
                 key={label}
                 x={leftPad + 56 + index * ((W - rightPad - 110) / (dayLabels.length - 1))}
                 y={H - 8}
-                fill="#8d9ab2"
+                fill="#9ec6b7"
                 fontSize="11"
                 textAnchor="middle"
               >
