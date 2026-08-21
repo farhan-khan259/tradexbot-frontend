@@ -5,6 +5,8 @@ export interface User {
   is_active: boolean;
   is_admin: boolean;
   balance: number;
+  basic_funded_balance: number;
+  pro_funded_balance: number;
   purchased_bot_ids: string[];
   referral_code: string;
   created_at: string;

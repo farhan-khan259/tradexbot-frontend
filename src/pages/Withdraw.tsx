@@ -15,7 +15,7 @@ const requestDate = (value: string) =>
 
 export function Withdraw() {
   const { user, refresh } = useAuth();
-  const [accountName, setAccountName] = useState("Spot");
+  const [accountName, setAccountName] = useState("Wallet");
   const [amount, setAmount] = useState("");
   const [walletAddress, setWalletAddress] = useState("");
   const [network, setNetwork] = useState("TRC20");
@@ -25,7 +25,12 @@ export function Withdraw() {
   const [history, setHistory] = useState<Transaction[]>([]);
   const [loadingHistory, setLoadingHistory] = useState(true);
 
-  const availableBalance = Number(user?.balance ?? 0);
+  const accountMinimum = accountName === "Basic Funded" ? 700 : accountName === "Pro Funded" ? 1500 : 0;
+  const availableBalance = accountName === "Basic Funded"
+    ? Number(user?.basic_funded_balance ?? 0)
+    : accountName === "Pro Funded"
+      ? Number(user?.pro_funded_balance ?? 0)
+      : Number(user?.balance ?? 0);
   const amountValue = Number(amount);
   const amountIsValid =
     Number.isFinite(amountValue) &&
@@ -47,8 +52,8 @@ export function Withdraw() {
   }, []);
 
   async function submitWithdrawal() {
-    if (availableBalance < MIN_WITHDRAWAL) {
-      setError(`You need at least ${money(MIN_WITHDRAWAL)} available before requesting a withdrawal.`);
+    if (availableBalance < Math.max(MIN_WITHDRAWAL, accountMinimum)) {
+      setError(`This account must reach ${money(Math.max(MIN_WITHDRAWAL, accountMinimum))} before requesting a withdrawal.`);
       return;
     }
 
@@ -76,7 +81,7 @@ export function Withdraw() {
         network,
         note: note.trim() || null,
       });
-      setAccountName("Spot");
+      setAccountName("Wallet");
       setAmount("");
       setWalletAddress("");
       setNote("");
@@ -114,9 +119,9 @@ export function Withdraw() {
           </div>
         </section>
 
-        {availableBalance < MIN_WITHDRAWAL && (
+        {availableBalance < Math.max(MIN_WITHDRAWAL, accountMinimum) && (
           <div className="withdraw-warning">
-            Your available balance is below the minimum withdrawal amount of {money(MIN_WITHDRAWAL)}.
+            This account must reach {money(Math.max(MIN_WITHDRAWAL, accountMinimum))} before a withdrawal can be requested.
           </div>
         )}
 
@@ -127,9 +132,9 @@ export function Withdraw() {
             <label>
               Account Name
               <select className="input" value={accountName} onChange={(e) => setAccountName(e.target.value)}>
-                <option value="Spot">Spot</option>
-                <option value="Trading">Trading</option>
-                <option value="Bot">Bot</option>
+                <option value="Wallet">Wallet</option>
+                <option value="Basic Funded">Basic Funded</option>
+                <option value="Pro Funded">Pro Funded</option>
               </select>
             </label>
 
@@ -192,14 +197,14 @@ export function Withdraw() {
             />
           </label>
 
-          <p className="muted">Note: Withdrawals will be received within 24-48 hours.</p>
+          <p className="muted">Basic Funded withdrawals unlock at $700. Pro Funded withdrawals unlock at $1,500. Withdrawals will be received within 24-48 hours.</p>
 
           {error && <p className="error">{error}</p>}
 
           <button
             className="btn withdraw-action"
             type="button"
-            disabled={busy || availableBalance < MIN_WITHDRAWAL}
+            disabled={busy || availableBalance < Math.max(MIN_WITHDRAWAL, accountMinimum)}
             onClick={() => void submitWithdrawal()}
           >
             {busy ? "Submitting..." : "Withdraw"}

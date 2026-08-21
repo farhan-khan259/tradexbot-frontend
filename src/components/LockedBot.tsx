@@ -14,7 +14,7 @@ interface LockedBotProps {
 const dollars = (value: number) => `$${value.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 
 export function LockedBot({ botId, name, price, accuracy, fundedCredit }: LockedBotProps) {
-  const { user, updateBalance, updatePurchasedBots } = useAuth();
+  const { user, updateBalance, updateFundedBalance, updatePurchasedBots } = useAuth();
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const [purchased, setPurchased] = useState(false);
@@ -32,6 +32,9 @@ export function LockedBot({ botId, name, price, accuracy, fundedCredit }: Locked
     try {
       const { data } = await api.post("/bot/purchase", { bot_id: botId });
       updateBalance(data.balance);
+      if (botId === "basic-funded" || botId === "pro-funded") {
+        updateFundedBalance(botId, data.funded_balance);
+      }
       setPurchasedBotIds(data.purchased_bot_ids);
       setPurchased(true);
     } catch (err) {
@@ -49,7 +52,7 @@ export function LockedBot({ botId, name, price, accuracy, fundedCredit }: Locked
         <h1 id="locked-bot-title">{name}</h1>
         <div className="locked-bot__price">{dollars(price)}</div>
         <p className="locked-bot__accuracy">{accuracy}% accuracy automated strategy</p>
-        {fundedCredit && <p className="locked-bot__funding">Includes <strong>{dollars(fundedCredit)} funded trading capital</strong>, credited to your wallet immediately after purchase.</p>}
+        {fundedCredit && <p className="locked-bot__funding">Includes <strong>{dollars(fundedCredit)} funded trading capital</strong>, kept separate for funded trades.</p>}
         <div className="locked-bot__wallet"><Wallet size={17} /> Wallet balance: {dollars(balance)}</div>
         <button className="btn btn-primary" type="button" onClick={purchase} disabled={busy}>
           {busy ? "Purchasing…" : `Unlock for ${dollars(price)}`}

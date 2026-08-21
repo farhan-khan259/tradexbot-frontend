@@ -506,6 +506,32 @@ th { color: var(--muted); font-weight: 600; }
   letter-spacing: -0.03em;
 }
 
+.bot-funded-balance {
+  padding: 1.1rem 1.25rem 1.2rem;
+  border: 1px solid color-mix(in srgb, var(--bot-accent) 45%, #223652);
+  border-radius: 18px;
+  background: linear-gradient(135deg, var(--bot-glow), rgba(13, 24, 44, 0.96) 72%);
+}
+.bot-funded-balance__label {
+  color: var(--bot-accent);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.bot-funded-balance__amount {
+  margin-top: 0.15rem;
+  color: #fff;
+  font-size: clamp(2rem, 7vw, 3.2rem);
+  font-weight: 900;
+  line-height: 1.05;
+}
+.bot-funded-balance__note {
+  margin-top: 0.35rem;
+  color: #a5b5ca;
+  font-size: 0.8rem;
+}
+
 .bot-engine-card,
 .bot-config-card,
 .bot-progress-card,

@@ -65,9 +65,15 @@ function pad(n: number) {
 type BotVariant = "standard" | "basic-funded" | "pro-funded" | "basic-ai" | "pro-ai";
 
 export function AIBot({ title = "Free AI Trading Bot", variant = "standard" }: { title?: string; variant?: BotVariant }) {
-  const { user, updateBalance } = useAuth();
+  const { user, updateBalance, updateFundedBalance } = useAuth();
   const navigate = useNavigate();
-  const [currentBalance, setCurrentBalance] = useState(Number(user?.balance ?? 0));
+  const accountType = variant === "basic-funded" || variant === "pro-funded" ? variant : "wallet";
+  const accountBalance = () => accountType === "basic-funded"
+    ? Number(user?.basic_funded_balance ?? 0)
+    : accountType === "pro-funded"
+      ? Number(user?.pro_funded_balance ?? 0)
+      : Number(user?.balance ?? 0);
+  const [currentBalance, setCurrentBalance] = useState(accountBalance());
 
   const [status, setStatus] = useState<Status>("standby");
   const [pair, setPair] = useState(PAIRS[0]);
@@ -112,15 +118,12 @@ export function AIBot({ title = "Free AI Trading Bot", variant = "standard" }: {
           // Refresh balance and session logs
           try {
             const { data: st } = await api.get("/bot/trade/status");
-            if (st && st.balance !== undefined && st.balance !== null) {
+            if (accountType === "wallet" && st && st.balance !== undefined && st.balance !== null) {
               setCurrentBalance(Number(st.balance));
               updateBalance(Number(st.balance));
             } else {
-              // Don't overwrite with 0 — prefer the auth/user balance or keep current
-              const fallback = Number(user?.balance ?? currentBalance ?? 0);
+              const fallback = accountBalance();
               setCurrentBalance(fallback);
-              // keep updateBalance only if we actually have a real user balance
-              if (user && user.balance !== undefined) updateBalance(Number(user.balance));
             }
             if (st && Array.isArray(st.recent_logs)) {
               const recent = st.recent_logs.map((log: string) => ({ type: "analysis", time: "00:00:00", text: log } as LogLine));
@@ -136,12 +139,11 @@ export function AIBot({ title = "Free AI Trading Bot", variant = "standard" }: {
     };
 
     restorePending();
-  }, []);
+  }, [accountType]);
 
   useEffect(() => {
-    const balance = Number(user?.balance ?? 0);
-    setCurrentBalance(balance);
-  }, [user?.balance, tradeStarted]);
+    setCurrentBalance(accountBalance());
+  }, [user?.balance, user?.basic_funded_balance, user?.pro_funded_balance, tradeStarted]);
 
   useEffect(() => {
     if (status !== "running") return;
@@ -159,14 +161,13 @@ export function AIBot({ title = "Free AI Trading Bot", variant = "standard" }: {
     if (status !== "running" || !tradeStarted) return;
 
     const balanceRefreshInterval = window.setInterval(() => {
-      const balance = Number(user?.balance ?? 0);
-      setCurrentBalance(balance);
+      setCurrentBalance(accountBalance());
     }, 2000);
 
     return () => {
       window.clearInterval(balanceRefreshInterval);
     };
-  }, [status, tradeStarted, user?.balance]);
+  }, [status, tradeStarted, user?.balance, user?.basic_funded_balance, user?.pro_funded_balance, accountType]);
 
   useEffect(() => {
     if (status !== "running" || !tradeStarted) return;
@@ -241,6 +242,7 @@ export function AIBot({ title = "Free AI Trading Bot", variant = "standard" }: {
           pair: pair,
           amount: pendingStake,
           phase: "settle",
+          account_type: accountType,
         });
 
         const now = new Date();
@@ -269,7 +271,8 @@ export function AIBot({ title = "Free AI Trading Bot", variant = "standard" }: {
         // Use data.delta directly for accurate profit/loss calculation
         setRunPL(data.delta);
         setCurrentBalance(data.balance);
-        updateBalance(data.balance);
+        if (accountType === "wallet") updateBalance(data.balance);
+        else updateFundedBalance(accountType, data.balance);
         if (data.win) setWins((prev) => prev + 1);
         else setLosses((prev) => prev + 1);
         setTradeStarted(false);
@@ -287,7 +290,7 @@ export function AIBot({ title = "Free AI Trading Bot", variant = "standard" }: {
     };
 
     settleTrade();
-  }, [remaining, status, tradeStarted, pair, pendingStake, updateBalance]);
+  }, [remaining, status, tradeStarted, pair, pendingStake, accountType, updateBalance, updateFundedBalance]);
 
   useEffect(() => {
     if (termRef.current) {
@@ -354,10 +357,12 @@ export function AIBot({ title = "Free AI Trading Bot", variant = "standard" }: {
         amount: amt,
         phase: "start",
         duration,
+        account_type: accountType,
       });
 
       setCurrentBalance(data.balance);
-      updateBalance(data.balance);
+      if (accountType === "wallet") updateBalance(data.balance);
+      else updateFundedBalance(accountType, data.balance);
       setLogs((prev) => [
         ...prev.slice(-39),
         {
@@ -410,6 +415,14 @@ export function AIBot({ title = "Free AI Trading Bot", variant = "standard" }: {
     <div className={`bot-page bot-page--sim bot-page--${variant}`}>
       <div className={`bot-shell bot-shell--${variant}`}>
         <h1 className="bot-shell__title">{title}</h1>
+
+        {accountType !== "wallet" && (
+          <section className="bot-funded-balance" aria-label={`${accountType === "basic-funded" ? "Basic" : "Pro"} funded account balance`}>
+            <div className="bot-funded-balance__label">{accountType === "basic-funded" ? "Basic Funded Balance" : "Pro Funded Balance"}</div>
+            <div className="bot-funded-balance__amount">{money(currentBalance)}</div>
+            <div className="bot-funded-balance__note">Available for funded trades only</div>
+          </section>
+        )}
 
         <section className="card bot-engine-card">
           <div className="bot-engine-card__top">
@@ -585,7 +598,7 @@ export function AIBot({ title = "Free AI Trading Bot", variant = "standard" }: {
             <div className="bot-stat-card__icon bot-stat-card__icon--balance">
               <Wallet size={15} />
             </div>
-            <div className="bot-label">Balance</div>
+              <div className="bot-label">{accountType === "wallet" ? "Wallet Balance" : "Funded Balance"}</div>
             <strong>{money(currentBalance).replace(".00", "")}</strong>
           </article>
 

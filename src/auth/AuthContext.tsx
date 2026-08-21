@@ -10,6 +10,7 @@ interface AuthState {
   logout: () => void;
   refresh: () => Promise<User | null>;
   updateBalance: (balance: number) => void;
+  updateFundedBalance: (accountType: "basic-funded" | "pro-funded", balance: number) => void;
   updatePurchasedBots: (purchasedBotIds: string[]) => void;
   setWalletBalance: (balance: SetStateAction<number>) => void;
 }
@@ -66,6 +67,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUser((prev) => (prev ? { ...prev, balance } : prev));
   }
 
+  function updateFundedBalance(accountType: "basic-funded" | "pro-funded", balance: number) {
+    setUser((prev) => {
+      if (!prev) return prev;
+      return accountType === "basic-funded"
+        ? { ...prev, basic_funded_balance: balance }
+        : { ...prev, pro_funded_balance: balance };
+    });
+  }
+
   function updatePurchasedBots(purchasedBotIds: string[]) {
     setUser((prev) => (prev ? { ...prev, purchased_bot_ids: purchasedBotIds } : prev));
   }
@@ -82,7 +92,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, register, logout, refresh, updateBalance, updatePurchasedBots, setWalletBalance }}>
+    <AuthContext.Provider value={{ user, loading, login, register, logout, refresh, updateBalance, updateFundedBalance, updatePurchasedBots, setWalletBalance }}>
       {children}
     </AuthContext.Provider>
   );

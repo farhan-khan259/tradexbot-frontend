@@ -25,7 +25,7 @@ const dollars = (value: number) => `$${value.toLocaleString(undefined, { minimum
 
 export function BotMarketplace() {
   const navigate = useNavigate();
-  const { user, updateBalance, updatePurchasedBots } = useAuth();
+  const { user, updateBalance, updateFundedBalance, updatePurchasedBots } = useAuth();
   const { purchasedBots } = useBotAccess();
   const walletBalance = Number(user?.balance ?? 0);
   const [selectedBot, setSelectedBot] = useState<TradingBot | null>(null);
@@ -58,6 +58,9 @@ export function BotMarketplace() {
     try {
       const { data } = await api.post("/bot/purchase", { bot_id: selectedBot.id });
       updateBalance(data.balance);
+      if (selectedBot.id === "basic-funded" || selectedBot.id === "pro-funded") {
+        updateFundedBalance(selectedBot.id, data.funded_balance);
+      }
       updatePurchasedBots(data.purchased_bot_ids);
       setSelectedBot(null);
       navigate(selectedBot.path);

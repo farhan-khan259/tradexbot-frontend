@@ -44,6 +44,8 @@ export function AdminUsers() {
       <div className="card">
         {loading ? (
           <p className="muted">Loading…</p>
+        ) : users.length === 0 ? (
+          <p className="muted">No registered users yet.</p>
         ) : filtered.length === 0 ? (
           <p className="muted">No users match your search.</p>
         ) : (

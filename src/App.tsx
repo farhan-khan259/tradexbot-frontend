@@ -62,8 +62,8 @@ export default function App() {
       <Route path="/deposit" element={<Shell><Deposit /></Shell>} />
       <Route path="/withdraw" element={<Shell><Withdraw /></Shell>} />
       <Route path="/bot" element={<Shell><AIBot variant="basic-ai" /></Shell>} />
-      <Route path="/bot/basic-funded" element={<Shell><PaidBotRoute botId="basic-funded" name="Basic Funded AI Trading Bot" price={100} accuracy={75} fundedCredit={500}><BasicFundedAIBot /></PaidBotRoute></Shell>} />
-      <Route path="/bot/pro-funded" element={<Shell><PaidBotRoute botId="pro-funded" name="Pro Funded AI Trading Bot" price={200} accuracy={90} fundedCredit={1000}><ProFundedAIBot /></PaidBotRoute></Shell>} />
+      <Route path="/bot/basic-funded" element={<Shell><PaidBotRoute botId="basic-funded" name="Basic Funded AI Trading Bot" price={100} accuracy={60} fundedCredit={500}><BasicFundedAIBot /></PaidBotRoute></Shell>} />
+      <Route path="/bot/pro-funded" element={<Shell><PaidBotRoute botId="pro-funded" name="Pro Funded AI Trading Bot" price={200} accuracy={80} fundedCredit={1000}><ProFundedAIBot /></PaidBotRoute></Shell>} />
       <Route path="/bot/basic-bot" element={<Shell><PaidBotRoute botId="basic-bot" name="Basic AI Trading Bot" price={30} accuracy={75}><BasicBotAIBot /></PaidBotRoute></Shell>} />
       <Route path="/bot/pro-bot" element={<Shell><PaidBotRoute botId="pro-bot" name="Pro AI Trading Bot" price={60} accuracy={90}><ProBotAIBot /></PaidBotRoute></Shell>} />
       <Route path="/transactions" element={<Shell><Transactions /></Shell>} />
