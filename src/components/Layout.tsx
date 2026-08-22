@@ -54,6 +54,8 @@ export function Layout({ children }: { children: ReactNode }) {
 
   return (
     <div className={`app-shell app-shell--v2 ${sidebarOpen ? "sidebar-open" : ""}`}>
+      <div className="app-shell__aurora app-shell__aurora--one" aria-hidden="true" />
+      <div className="app-shell__aurora app-shell__aurora--two" aria-hidden="true" />
       <aside className={`app-sidebar app-sidebar--v2 ${sidebarOpen ? "is-open" : ""}`}>
         <div className="app-sidebar__top app-sidebar__top--v2">
           <div className="app-sidebar__brand app-sidebar__brand--v2">
@@ -79,11 +81,7 @@ export function Layout({ children }: { children: ReactNode }) {
               key={item.to}
               to={item.to}
               end={item.to === "/bot"}
-              className="app-nav__link"
-              style={({ isActive }) => ({
-                color: isActive ? "#06121f" : "var(--text)",
-                background: isActive ? "var(--gradient)" : "rgba(255,255,255,0.02)",
-              })}
+              className={({ isActive }) => `app-nav__link ${isActive ? "is-active" : ""}`}
             >
               <item.Icon size={18} />
               <span>{item.label}</span>

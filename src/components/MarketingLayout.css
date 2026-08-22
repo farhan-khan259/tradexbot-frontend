@@ -1,1 +1,13 @@
 .marketing-shell{overflow:hidden;background:#071511}.marketing-container{width:min(1160px,calc(100% - 3rem));margin-inline:auto}.marketing-header{position:sticky;top:0;z-index:30;background:rgba(7,21,17,.78);backdrop-filter:blur(18px);border-bottom:1px solid rgba(168,221,204,.12)}.marketing-header__inner{height:76px;display:flex;align-items:center;justify-content:space-between}.marketing-nav{display:flex;align-items:center;gap:1.7rem}.marketing-nav a{color:#afd2c4;font-size:.82rem;font-weight:700;transition:color .2s ease}.marketing-nav a:hover,.marketing-nav a.active{color:#f1fff9}.marketing-nav .marketing-nav__login{margin-left:.4rem}.marketing-nav .marketing-nav__cta{color:#092017;padding:.65rem 1rem}.marketing-menu{display:none;background:transparent;border:0;color:var(--text);padding:.3rem}.marketing-footer{padding:3.6rem 0 2rem;border-top:1px solid rgba(168,221,204,.13);background:#06110e}.marketing-footer__inner{display:grid;grid-template-columns:1.4fr 1fr auto;gap:2rem;align-items:start}.marketing-footer p,.marketing-footer small{display:block;color:#8db4a6;font-size:.78rem;line-height:1.7;margin-top:.9rem}.marketing-footer__links{display:grid;grid-template-columns:repeat(2,max-content);gap:.7rem 2.4rem}.marketing-footer__links a{color:#b8dccf;font-size:.8rem}@media(max-width:760px){.marketing-container{width:min(100% - 2rem,1160px)}.marketing-menu{display:grid;place-items:center}.marketing-nav{display:none}.marketing-nav.is-open{position:absolute;display:grid;gap:1rem;align-items:stretch;top:76px;left:0;right:0;padding:1.2rem 1rem 1.4rem;background:#0a1c17;border-bottom:1px solid var(--border)}.marketing-nav .marketing-nav__login{margin-left:0}.marketing-nav .marketing-nav__cta{text-align:center}.marketing-footer__inner{grid-template-columns:1fr;gap:1.7rem}.marketing-footer small{margin-top:0}}
+@media(max-width:760px){
+	.marketing-shell{width:100%;min-width:0;overflow-x:hidden}
+	.marketing-header__inner{min-height:64px;height:auto;padding:.7rem 0}
+	.marketing-nav.is-open{top:64px}
+	.marketing-footer__links{grid-template-columns:repeat(2,minmax(0,1fr));gap:.7rem 1rem}
+	.marketing-footer__links a{overflow-wrap:anywhere}
+	.marketing-section,.landing-hero,.about-hero,.contact-hero,.features-hero,.how-hero{overflow:hidden}
+}
+@media(max-width:420px){
+	.marketing-container{width:calc(100% - 1.5rem)}
+	.marketing-footer__links{grid-template-columns:1fr}
+}
