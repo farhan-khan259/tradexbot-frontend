@@ -114,7 +114,7 @@ export function Landing() {
                 marginBottom: "1.5rem",
               }}
             >
-              <Zap size={15} color="var(--background)" /> Empowering Your Trading Journey
+              <Zap size={15} color="var(--background)" /> AI-Powered Trading, Built for Clarity
             </div>
             <h1 style={{ fontSize: "clamp(2.2rem, 5vw, 3.4rem)", lineHeight: 1.1 }}>
               Trade smarter with <span className="gradient-text">TradeXBot</span>
