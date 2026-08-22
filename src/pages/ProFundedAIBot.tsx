@@ -1,5 +1,5 @@
 import { AIBot } from "./AIBot";
 
 export function ProFundedAIBot() {
-  return <AIBot title="Pro Funded AI Trading Bot" variant="pro-funded" />;
+  return <AIBot title="AI Funded Pro" variant="pro-funded" />;
 }

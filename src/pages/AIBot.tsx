@@ -64,7 +64,7 @@ function pad(n: number) {
 
 type BotVariant = "standard" | "basic-funded" | "pro-funded" | "basic-ai" | "pro-ai";
 
-export function AIBot({ title = "Free AI Trading Bot", variant = "standard" }: { title?: string; variant?: BotVariant }) {
+export function AIBot({ title = "AI Free Trader", variant = "standard" }: { title?: string; variant?: BotVariant }) {
   const { user, updateBalance, updateFundedBalance } = useAuth();
   const navigate = useNavigate();
   const accountType = variant === "basic-funded" || variant === "pro-funded" ? variant : "wallet";
@@ -423,8 +423,8 @@ export function AIBot({ title = "Free AI Trading Bot", variant = "standard" }: {
       <div className={`bot-shell bot-shell--${variant} bot-shell--workspace`}>
 
         {accountType !== "wallet" && (
-          <section className="bot-funded-balance workspace-panel" aria-label={`${accountType === "basic-funded" ? "Basic" : "Pro"} funded account balance`}>
-            <div className="bot-funded-balance__label">{accountType === "basic-funded" ? "Basic Funded Balance" : "Pro Funded Balance"}</div>
+          <section className="bot-funded-balance workspace-panel" aria-label={`${accountType === "basic-funded" ? "AI Funded Trader" : "AI Funded Pro"} account balance`}>
+            <div className="bot-funded-balance__label">{accountType === "basic-funded" ? "AI Funded Trader Balance" : "AI Funded Pro Balance"}</div>
             <div className="bot-funded-balance__amount">{money(currentBalance)}</div>
             <div className="bot-funded-balance__note">Available for funded trades only</div>
           </section>

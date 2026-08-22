@@ -14,11 +14,11 @@ interface TradingBot {
 }
 
 const BOTS: TradingBot[] = [
-  { id: "free-trading", name: "Free Trading", price: 0, path: "/bot/free", description: "Start trading with the standard AI engine." },
-  { id: "basic-funded", name: "Basic Funded", price: 100, path: "/bot/basic-funded", description: "A focused bot setup for funded trading." },
-  { id: "pro-funded", name: "Pro Funded", price: 200, path: "/bot/pro-funded", description: "Advanced controls for funded accounts." },
-  { id: "basic-bot", name: "Basic Bot", price: 30, path: "/bot/basic-bot", description: "A flexible AI bot for everyday strategies." },
-  { id: "pro-bot", name: "Pro Bot", price: 60, path: "/bot/pro-bot", description: "The full AI bot experience for active traders." },
+  { id: "free-trading", name: "AI Free Trader", price: 0, path: "/bot/free", description: "Start trading with the standard AI engine." },
+  { id: "basic-funded", name: "AI Funded Trader", price: 100, path: "/bot/basic-funded", description: "A focused bot setup for funded trading." },
+  { id: "pro-funded", name: "AI Funded Pro", price: 200, path: "/bot/pro-funded", description: "Advanced controls for funded accounts." },
+  { id: "basic-bot", name: "AI Smart Trader", price: 30, path: "/bot/basic-bot", description: "A flexible AI bot for everyday strategies." },
+  { id: "pro-bot", name: "AI Pro Trader", price: 60, path: "/bot/pro-bot", description: "The full AI bot experience for active traders." },
 ];
 
 const dollars = (value: number) => `$${value.toLocaleString(undefined, { maximumFractionDigits: 2 })}`;

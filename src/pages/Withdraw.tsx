@@ -25,10 +25,10 @@ export function Withdraw() {
   const [history, setHistory] = useState<Transaction[]>([]);
   const [loadingHistory, setLoadingHistory] = useState(true);
 
-  const accountMinimum = accountName === "Basic Funded" ? 700 : accountName === "Pro Funded" ? 1500 : 0;
-  const availableBalance = accountName === "Basic Funded"
+  const accountMinimum = accountName === "AI Funded Trader" ? 700 : accountName === "AI Funded Pro" ? 1500 : 0;
+  const availableBalance = accountName === "AI Funded Trader"
     ? Number(user?.basic_funded_balance ?? 0)
-    : accountName === "Pro Funded"
+    : accountName === "AI Funded Pro"
       ? Number(user?.pro_funded_balance ?? 0)
       : Number(user?.balance ?? 0);
   const amountValue = Number(amount);
@@ -133,8 +133,8 @@ export function Withdraw() {
               Account Name
               <select className="input" value={accountName} onChange={(e) => setAccountName(e.target.value)}>
                 <option value="Wallet">Wallet</option>
-                <option value="Basic Funded">Basic Funded</option>
-                <option value="Pro Funded">Pro Funded</option>
+                <option value="AI Funded Trader">AI Funded Trader</option>
+                <option value="AI Funded Pro">AI Funded Pro</option>
               </select>
             </label>
 
@@ -197,7 +197,7 @@ export function Withdraw() {
             />
           </label>
 
-          <p className="muted">Basic Funded withdrawals unlock at $700. Pro Funded withdrawals unlock at $1,500. Withdrawals will be received within 24-48 hours.</p>
+          <p className="muted">AI Funded Trader withdrawals unlock at $700. AI Funded Pro withdrawals unlock at $1,500. Withdrawals will be received within 24-48 hours.</p>
 
           {error && <p className="error">{error}</p>}
 
