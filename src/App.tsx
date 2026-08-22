@@ -61,6 +61,7 @@ export default function App() {
     <Routes>
       {/* Public */}
       <Route path="/" element={<Landing />} />
+      <Route path="/home" element={<Landing />} />
       <Route path="/about" element={<About />} />
       <Route path="/features" element={<Features />} />
       <Route path="/how-it-works" element={<HowItWorks />} />
