@@ -37,7 +37,7 @@ const navItems = [
   { to: "/kyc", label: "KYC verification", Icon: ScanFace },
 ];
 
-const customerServiceUrl = "https://t.me/TradeXBotCustomerSupport";
+const customerServiceUrl = "https://t.me/Tradexbotofficial";
 
 export function Layout({ children }: { children: ReactNode }) {
   const { user, logout } = useAuth();

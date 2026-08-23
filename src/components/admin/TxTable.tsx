@@ -111,9 +111,13 @@ export function TxTable({
           <div
             style={{
               position: "relative",
-              maxWidth: "100%",
-              maxHeight: "100%",
               width: "min(90vw, 900px)",
+              height: "min(90vh, 800px)",
+              maxWidth: "100%",
+              maxHeight: "90vh",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
               background: "#0f172a",
               borderRadius: "0.75rem",
               boxShadow: "0 18px 50px rgba(0,0,0,0.55)",
@@ -143,10 +147,11 @@ export function TxTable({
               src={screenshotUrl}
               alt="Deposit screenshot"
               style={{
-                width: "100%",
+                maxWidth: "100%",
+                maxHeight: "100%",
+                width: "auto",
                 height: "auto",
                 display: "block",
-                maxHeight: "90vh",
                 objectFit: "contain",
               }}
             />
