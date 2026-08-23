@@ -68,7 +68,7 @@ const formatPrice = (value: number, decimals: number) => `$${value.toLocaleStrin
 function fallbackCandles(pair: typeof PAIRS[number], timeframe: string): MarketCandle[] {
   const timeframeSeed = timeframe.split("").reduce((total, char) => total + char.charCodeAt(0), 0);
   let price = pair.seed;
-  return Array.from({ length: 72 }, (_, index) => {
+  return Array.from({ length: 500 }, (_, index) => {
     const wave = Math.sin((index + timeframeSeed) / 4.7) * 0.004;
     const drift = ((index % 9) - 4) * 0.0007;
     const open = price;
@@ -76,7 +76,7 @@ function fallbackCandles(pair: typeof PAIRS[number], timeframe: string): MarketC
     const high = Math.max(open, close) * 1.0025;
     const low = Math.min(open, close) * 0.9975;
     price = close;
-    return { time: Date.now() - (72 - index) * 60_000, o: open, h: high, l: low, c: close, v: 35 + (index * 17) % 65 };
+    return { time: Date.now() - (500 - index) * 60_000, o: open, h: high, l: low, c: close, v: 35 + (index * 17) % 65 };
   });
 }
 
@@ -121,6 +121,7 @@ export function ManualTrading() {
   const [balance, setBalance] = useState<number | null>(null);
   const [tradeResult, setTradeResult] = useState<TradeResult | null>(null);
   const settlingPositions = useRef(new Set<string>());
+  const chartViewKey = useRef("");
   const [chartStart, setChartStart] = useState(0);
   const [chartVisibleCount, setChartVisibleCount] = useState(50);
   const [dragX, setDragX] = useState<number | null>(null);
@@ -140,17 +141,33 @@ export function ManualTrading() {
       setLoading(true);
       try {
         const result = await fetchMarketCandles(pair.symbol, timeframe, controller.signal);
-        if (mounted) { setCandles(result.length ? result : fallbackCandles(pair, timeframe)); setError(""); }
+        if (mounted) {
+          const nextCandles = result.length ? result : fallbackCandles(pair, timeframe);
+          setCandles(nextCandles);
+          const nextViewKey = `${pair.symbol}:${timeframe}`;
+          if (chartViewKey.current !== nextViewKey) {
+            chartViewKey.current = nextViewKey;
+            setChartStart(Math.max(0, nextCandles.length - chartVisibleCount));
+          }
+          setError("");
+        }
       } catch (requestError) {
-        if (mounted) { setCandles(fallbackCandles(pair, timeframe)); setError(apiError(requestError, "Live feed unavailable. Showing simulated market data.")); }
+        if (mounted) {
+          const nextCandles = fallbackCandles(pair, timeframe);
+          setCandles(nextCandles);
+          const nextViewKey = `${pair.symbol}:${timeframe}`;
+          if (chartViewKey.current !== nextViewKey) {
+            chartViewKey.current = nextViewKey;
+            setChartStart(Math.max(0, nextCandles.length - chartVisibleCount));
+          }
+          setError(apiError(requestError, "Live feed unavailable. Showing simulated market data."));
+        }
       } finally { if (mounted) setLoading(false); }
     };
     void load();
     const interval = window.setInterval(load, 15_000);
     return () => { mounted = false; controller.abort(); window.clearInterval(interval); };
   }, [pair.symbol, timeframe]);
-
-  useEffect(() => setChartStart(0), [pair.symbol, timeframe]);
 
   useEffect(() => {
     const interval = window.setInterval(() => {
@@ -234,6 +251,11 @@ export function ManualTrading() {
     setIndicators((current) => current.includes(indicator) ? current.filter((item) => item !== indicator) : [...current, indicator]);
   }
 
+  function showLatestChart(nextVisibleCount: number) {
+    setChartVisibleCount(nextVisibleCount);
+    setChartStart(Math.max(0, candles.length - nextVisibleCount));
+  }
+
   function handleChartPointerDown(event: React.PointerEvent<SVGSVGElement>) {
     event.currentTarget.setPointerCapture(event.pointerId);
     setDragX(event.clientX);
@@ -283,6 +305,7 @@ export function ManualTrading() {
   const chartBottom = 330;
   const right = 82;
   const left = 18;
+  const futureSlots = 8;
   const visibleCandles = candles.slice(chartStart, chartStart + chartVisibleCount);
   const visibleCloses = visibleCandles.map((candle) => candle.c);
   const visibleMax = Math.max(...visibleCandles.map((candle) => candle.h), price * 1.01);
@@ -290,9 +313,11 @@ export function ManualTrading() {
   const max = Number.isFinite(visibleMax) ? visibleMax : price * 1.01;
   const min = Number.isFinite(visibleMin) ? visibleMin : price * 0.99;
   const range = max - min || 1;
-  const x = (index: number) => left + (index / Math.max(visibleCandles.length - 1, 1)) * (W - left - right);
+  const plotWidth = W - left - right;
+  const totalSlots = Math.max(visibleCandles.length + futureSlots, 1);
+  const slot = plotWidth / totalSlots;
+  const x = (index: number) => left + (index + 0.5) * slot;
   const y = (value: number) => chartTop + (1 - (value - min) / range) * (chartBottom - chartTop);
-  const slot = (W - left - right) / Math.max(visibleCandles.length, 1);
   const priceTicks = Array.from({ length: 6 }, (_, index) => max - (range / 5) * index);
   const linePath = (values: Array<number | null>) => values.map((value, index) => value === null ? "" : `${index && values[index - 1] !== null ? "L" : "M"}${x(index).toFixed(1)},${y(value).toFixed(1)}`).join(" ");
 
@@ -326,7 +351,7 @@ export function ManualTrading() {
             <div className="manual-trading__instrument"><span style={{ background: pair.color }}>{pair.symbol.slice(0, 1)}</span><div><strong>{pair.label}</strong><small>{pair.name} · {timeframe} · TradeX live feed</small></div></div>
             <div className="manual-trading__quote"><strong>{formatPrice(price, pair.decimals)}</strong><span className={change >= 0 ? "is-up" : "is-down"}>{change >= 0 ? "▲" : "▼"} {Math.abs(change).toFixed(2)}%</span></div>
           </div>
-          <div className="manual-trading__chart-tools"><span><CandlestickChart size={15} /> Candles</span><span><Crosshair size={15} /> Crosshair</span><div className="manual-trading__zoom" aria-label="Chart zoom controls"><button type="button" onClick={() => { setChartVisibleCount((current) => Math.max(20, current - 10)); setChartStart(0); }} disabled={chartVisibleCount <= 20} aria-label="Zoom in"><ZoomIn size={14} /></button><button type="button" onClick={() => { setChartVisibleCount((current) => Math.min(72, current + 10)); setChartStart(0); }} disabled={chartVisibleCount >= 72} aria-label="Zoom out"><ZoomOut size={14} /></button></div><span className="manual-trading__feed"><i /> {error ? "Simulated feed" : "Live feed"}</span></div>
+          <div className="manual-trading__chart-tools"><span><CandlestickChart size={15} /> Candles</span><span><Crosshair size={15} /> Crosshair</span><div className="manual-trading__zoom" aria-label="Chart zoom controls"><button type="button" onClick={() => showLatestChart(Math.max(20, chartVisibleCount - 10))} disabled={chartVisibleCount <= 20} aria-label="Zoom in"><ZoomIn size={14} /></button><button type="button" onClick={() => showLatestChart(Math.min(500, chartVisibleCount + 10))} disabled={chartVisibleCount >= 500} aria-label="Zoom out"><ZoomOut size={14} /></button></div><span className="manual-trading__feed"><i /> {error ? "Simulated feed" : "Live feed"}</span></div>
           <div className="manual-trading__chart-scroll">
             <svg viewBox={`0 0 ${W} ${H}`} className="manual-trading__chart" role="img" aria-label={`${pair.label} candlestick chart`} onPointerDown={handleChartPointerDown} onPointerMove={handleChartPointerMove} onPointerUp={stopChartDrag} onPointerCancel={stopChartDrag}>
               <defs><linearGradient id="manual-chart-fill" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor={pair.color} stopOpacity=".16" /><stop offset="1" stopColor={pair.color} stopOpacity="0" /></linearGradient></defs>

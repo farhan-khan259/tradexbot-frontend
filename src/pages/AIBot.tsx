@@ -73,6 +73,11 @@ export function AIBot({ title = "AI Free Trader", variant = "standard" }: { titl
     : accountType === "pro-funded"
       ? Number(user?.pro_funded_balance ?? 0)
       : Number(user?.balance ?? 0);
+  const fundedMilestone = accountType === "basic-funded"
+    ? "Starts at $500. Reach $700 to receive a $700 reward."
+    : accountType === "pro-funded"
+      ? "Starts at $1,000. Reach $1,500 to receive a $1,500 reward."
+      : null;
   const [currentBalance, setCurrentBalance] = useState(accountBalance());
 
   const [status, setStatus] = useState<Status>("standby");
@@ -426,7 +431,7 @@ export function AIBot({ title = "AI Free Trader", variant = "standard" }: { titl
           <section className="bot-funded-balance workspace-panel" aria-label={`${accountType === "basic-funded" ? "AI Funded Trader" : "AI Funded Pro"} account balance`}>
             <div className="bot-funded-balance__label">{accountType === "basic-funded" ? "AI Funded Trader Balance" : "AI Funded Pro Balance"}</div>
             <div className="bot-funded-balance__amount">{money(currentBalance)}</div>
-            <div className="bot-funded-balance__note">Available for funded trades only</div>
+            <div className="bot-funded-balance__note">{fundedMilestone}</div>
           </section>
         )}
 

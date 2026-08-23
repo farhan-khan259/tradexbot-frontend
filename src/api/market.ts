@@ -30,6 +30,6 @@ export interface MarketCandle { time: number; o: number; h: number; l: number; c
 
 export async function fetchMarketCandles(symbol: string, interval: string, signal?: AbortSignal): Promise<MarketCandle[]> {
   void signal;
-  const { data } = await api.get<{ candles: MarketCandle[] }>(`/market/${symbol}/candles`, { params: { interval, limit: 80 } });
+  const { data } = await api.get<{ candles: MarketCandle[] }>(`/market/${symbol}/candles`, { params: { interval, limit: 500 } });
   return data.candles;
 }

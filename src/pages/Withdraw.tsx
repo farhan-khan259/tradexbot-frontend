@@ -22,6 +22,7 @@ export function Withdraw() {
   const [note, setNote] = useState("");
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
+  const [kycStatus, setKycStatus] = useState("not_verified");
   const [history, setHistory] = useState<Transaction[]>([]);
   const [loadingHistory, setLoadingHistory] = useState(true);
 
@@ -51,7 +52,18 @@ export function Withdraw() {
     void loadHistory();
   }, []);
 
+  useEffect(() => {
+    api.get<{ status?: string }>("/kyc")
+      .then(({ data }) => setKycStatus(data.status ?? "not_verified"))
+      .catch(() => setKycStatus("not_verified"));
+  }, []);
+
   async function submitWithdrawal() {
+    if (kycStatus !== "verified") {
+      setError("KYC verification is mandatory for withdrawal.");
+      return;
+    }
+
     if (availableBalance < Math.max(MIN_WITHDRAWAL, accountMinimum)) {
       setError(`This account must reach ${money(Math.max(MIN_WITHDRAWAL, accountMinimum))} before requesting a withdrawal.`);
       return;
@@ -118,6 +130,10 @@ export function Withdraw() {
             </div>
           </div>
         </section>
+
+        <div className="withdraw-warning">
+          KYC verification is mandatory for withdrawal. Complete and pass KYC verification before submitting a withdrawal request.
+        </div>
 
         {availableBalance < Math.max(MIN_WITHDRAWAL, accountMinimum) && (
           <div className="withdraw-warning">
@@ -204,7 +220,7 @@ export function Withdraw() {
           <button
             className="btn withdraw-action"
             type="button"
-            disabled={busy || availableBalance < Math.max(MIN_WITHDRAWAL, accountMinimum)}
+            disabled={busy || kycStatus !== "verified" || availableBalance < Math.max(MIN_WITHDRAWAL, accountMinimum)}
             onClick={() => void submitWithdrawal()}
           >
             {busy ? "Submitting..." : "Withdraw"}

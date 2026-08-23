@@ -53,6 +53,8 @@ export function LockedBot({ botId, name, price, accuracy, fundedCredit }: Locked
         <div className="locked-bot__price">{dollars(price)}</div>
         <p className="locked-bot__accuracy">{accuracy}% accuracy automated strategy</p>
         {fundedCredit && <p className="locked-bot__funding">Includes <strong>{dollars(fundedCredit)} funded trading capital</strong>, kept separate for funded trades.</p>}
+        {botId === "basic-funded" && <p className="locked-bot__funding">Reach the funded balance from <strong>$500 to $700</strong> to get a <strong>$700 reward</strong>.</p>}
+        {botId === "pro-funded" && <p className="locked-bot__funding">Reach the funded balance from <strong>$1,000 to $1,500</strong> to get a <strong>$1,500 reward</strong>.</p>}
         <div className="locked-bot__wallet"><Wallet size={17} /> Wallet balance: {dollars(balance)}</div>
         <button className="btn btn-primary" type="button" onClick={purchase} disabled={busy}>
           {busy ? "Purchasing…" : `Unlock for ${dollars(price)}`}
