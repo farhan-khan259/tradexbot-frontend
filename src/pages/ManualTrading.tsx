@@ -12,6 +12,8 @@ import {
   RefreshCw,
   TrendingDown,
   TrendingUp,
+  ZoomIn,
+  ZoomOut,
 } from "lucide-react";
 import { fetchMarketCandles, type MarketCandle } from "../api/market";
 import { api, apiError } from "../api/client";
@@ -120,6 +122,7 @@ export function ManualTrading() {
   const [tradeResult, setTradeResult] = useState<TradeResult | null>(null);
   const settlingPositions = useRef(new Set<string>());
   const [chartStart, setChartStart] = useState(0);
+  const [chartVisibleCount, setChartVisibleCount] = useState(50);
   const [dragX, setDragX] = useState<number | null>(null);
 
   const pair = PAIRS.find((item) => item.symbol === pairSymbol) ?? PAIRS[0];
@@ -241,7 +244,7 @@ export function ManualTrading() {
     const distance = dragX - event.clientX;
     if (Math.abs(distance) < 18) return;
     const step = distance > 0 ? 1 : -1;
-    setChartStart((current) => Math.max(0, Math.min(Math.max(candles.length - 50, 0), current + step)));
+    setChartStart((current) => Math.max(0, Math.min(Math.max(candles.length - chartVisibleCount, 0), current + step)));
     setDragX(event.clientX);
   }
 
@@ -280,7 +283,7 @@ export function ManualTrading() {
   const chartBottom = 330;
   const right = 82;
   const left = 18;
-  const visibleCandles = candles.slice(chartStart, chartStart + 50);
+  const visibleCandles = candles.slice(chartStart, chartStart + chartVisibleCount);
   const visibleCloses = visibleCandles.map((candle) => candle.c);
   const visibleMax = Math.max(...visibleCandles.map((candle) => candle.h), price * 1.01);
   const visibleMin = Math.min(...visibleCandles.map((candle) => candle.l), price * 0.99);
@@ -323,7 +326,7 @@ export function ManualTrading() {
             <div className="manual-trading__instrument"><span style={{ background: pair.color }}>{pair.symbol.slice(0, 1)}</span><div><strong>{pair.label}</strong><small>{pair.name} · {timeframe} · TradeX live feed</small></div></div>
             <div className="manual-trading__quote"><strong>{formatPrice(price, pair.decimals)}</strong><span className={change >= 0 ? "is-up" : "is-down"}>{change >= 0 ? "▲" : "▼"} {Math.abs(change).toFixed(2)}%</span></div>
           </div>
-          <div className="manual-trading__chart-tools"><span><CandlestickChart size={15} /> Candles</span><span><Crosshair size={15} /> Crosshair</span><span className="manual-trading__feed"><i /> {error ? "Simulated feed" : "Live feed"}</span></div>
+          <div className="manual-trading__chart-tools"><span><CandlestickChart size={15} /> Candles</span><span><Crosshair size={15} /> Crosshair</span><div className="manual-trading__zoom" aria-label="Chart zoom controls"><button type="button" onClick={() => { setChartVisibleCount((current) => Math.max(20, current - 10)); setChartStart(0); }} disabled={chartVisibleCount <= 20} aria-label="Zoom in"><ZoomIn size={14} /></button><button type="button" onClick={() => { setChartVisibleCount((current) => Math.min(72, current + 10)); setChartStart(0); }} disabled={chartVisibleCount >= 72} aria-label="Zoom out"><ZoomOut size={14} /></button></div><span className="manual-trading__feed"><i /> {error ? "Simulated feed" : "Live feed"}</span></div>
           <div className="manual-trading__chart-scroll">
             <svg viewBox={`0 0 ${W} ${H}`} className="manual-trading__chart" role="img" aria-label={`${pair.label} candlestick chart`} onPointerDown={handleChartPointerDown} onPointerMove={handleChartPointerMove} onPointerUp={stopChartDrag} onPointerCancel={stopChartDrag}>
               <defs><linearGradient id="manual-chart-fill" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor={pair.color} stopOpacity=".16" /><stop offset="1" stopColor={pair.color} stopOpacity="0" /></linearGradient></defs>

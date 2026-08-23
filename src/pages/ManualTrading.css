@@ -36,6 +36,10 @@
 .is-up { color: #6be0ae; }.is-down { color: #ff8291; }
 .manual-trading__chart-tools { justify-content: flex-start; margin: .9rem 0 .45rem; color: var(--manual-muted); font-size: .7rem; }
 .manual-trading__chart-tools span { display: inline-flex; align-items: center; gap: .3rem; }
+.manual-trading__zoom { display: inline-flex; gap: .25rem; margin-left: .35rem; }
+.manual-trading__zoom button { display: grid; place-items: center; width: 27px; height: 25px; padding: 0; border: 1px solid var(--manual-line); border-radius: 6px; color: var(--manual-muted); background: rgba(4, 19, 29, .5); cursor: pointer; }
+.manual-trading__zoom button:hover:not(:disabled) { color: #071720; border-color: #93efd4; background: #93efd4; }
+.manual-trading__zoom button:disabled { cursor: not-allowed; opacity: .35; }
 .manual-trading__feed { margin-left: auto; }.manual-trading__feed i { width: 6px; height: 6px; }
 .manual-trading__chart-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
 .manual-trading__chart { display: block; width: 100%; min-width: 650px; height: auto; min-height: 300px; cursor: grab; touch-action: pan-y; }
