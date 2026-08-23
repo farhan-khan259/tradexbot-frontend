@@ -15,6 +15,7 @@ import {
   ScanFace,
   ListChecks,
   ChevronRight,
+  CandlestickChart,
 } from "lucide-react";
 import { Logo } from "./Logo";
 import { useAuth } from "../auth/AuthContext";
@@ -24,6 +25,7 @@ const navItems = [
   { to: "/deposit", label: "Deposit", Icon: ArrowDownToLine },
   { to: "/withdraw", label: "Withdraw", Icon: ArrowUpFromLine },
   { to: "/bot", label: "AI Free Trader", Icon: Bot },
+  { to: "/manual-trading", label: "Manual Trading", Icon: CandlestickChart },
   { to: "/bot/basic-bot", label: "AI Smart Trader", Icon: Bot },
   { to: "/bot/pro-bot", label: "AI Pro Trader", Icon: Bot },
   { to: "/bot/basic-funded", label: "AI Funded Trader", Icon: Bot },

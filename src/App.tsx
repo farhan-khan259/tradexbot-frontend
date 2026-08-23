@@ -34,6 +34,7 @@ import { AdminKYC } from "./pages/admin/AdminKYC";
 import { TradeHistory } from "./pages/TradeHistory";
 import { Notifications } from "./pages/Notifications";
 import { KYC } from "./pages/KYC";
+import { ManualTrading } from "./pages/ManualTrading";
 
 function Shell({ children }: { children: React.ReactNode }) {
   return (
@@ -76,6 +77,7 @@ export default function App() {
       <Route path="/deposit" element={<Shell><Deposit /></Shell>} />
       <Route path="/withdraw" element={<Shell><Withdraw /></Shell>} />
       <Route path="/bot" element={<Shell><AIBot variant="basic-ai" /></Shell>} />
+      <Route path="/manual-trading" element={<Shell><ManualTrading /></Shell>} />
       <Route path="/bot/basic-funded" element={<Shell><PaidBotRoute botId="basic-funded" name="AI Funded Trader" price={100} accuracy={60} fundedCredit={500}><BasicFundedAIBot /></PaidBotRoute></Shell>} />
       <Route path="/bot/pro-funded" element={<Shell><PaidBotRoute botId="pro-funded" name="AI Funded Pro" price={200} accuracy={80} fundedCredit={1000}><ProFundedAIBot /></PaidBotRoute></Shell>} />
       <Route path="/bot/basic-bot" element={<Shell><PaidBotRoute botId="basic-bot" name="AI Smart Trader" price={30} accuracy={75}><BasicBotAIBot /></PaidBotRoute></Shell>} />
