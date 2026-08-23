@@ -112,8 +112,8 @@ export function KYC() {
         <div className="kyc-success-modal" role="dialog" aria-modal="true" aria-labelledby="kyc-success-title">
           <div className="kyc-success-modal__card">
             <div className="kyc-success-modal__icon">✓</div>
-            <h2 id="kyc-success-title">KYC submitted successfully</h2>
-            <p className="muted">Your verification details and documents were sent for review.</p>
+            <h2 id="kyc-success-title">KYC verification request submitted</h2>
+            <p className="muted">Your verification details and documents were sent for review. We will update your status once the review is complete.</p>
             <button className="btn" type="button" onClick={() => setShowSuccess(false)}>Continue</button>
           </div>
         </div>

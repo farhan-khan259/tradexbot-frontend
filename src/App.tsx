@@ -34,6 +34,7 @@ import { AdminKYC } from "./pages/admin/AdminKYC";
 import { TradeHistory } from "./pages/TradeHistory";
 import { Notifications } from "./pages/Notifications";
 import { KYC } from "./pages/KYC";
+import { Profile } from "./pages/Profile";
 import { ManualTrading } from "./pages/ManualTrading";
 
 function Shell({ children }: { children: React.ReactNode }) {
@@ -87,6 +88,7 @@ export default function App() {
       <Route path="/referrals" element={<Shell><Referrals /></Shell>} />
       <Route path="/notifications" element={<Shell><Notifications /></Shell>} />
       <Route path="/kyc" element={<Shell><KYC /></Shell>} />
+      <Route path="/profile" element={<Shell><Profile /></Shell>} />
 
       {/* Admin area (separate login + guard) */}
       <Route path="/admin/login" element={<AdminLogin />} />
