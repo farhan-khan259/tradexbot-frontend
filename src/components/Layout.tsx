@@ -16,6 +16,7 @@ import {
   ListChecks,
   ChevronRight,
   CandlestickChart,
+  UserRound,
 } from "lucide-react";
 import { Logo } from "./Logo";
 import { useAuth } from "../auth/AuthContext";
@@ -35,6 +36,7 @@ const navItems = [
   { to: "/referrals", label: "Referrals", Icon: Users },
   { to: "/notifications", label: "Notifications", Icon: Bell },
   { to: "/kyc", label: "KYC verification", Icon: ScanFace },
+  { to: "/profile", label: "Profile", Icon: UserRound },
 ];
 
 const customerServiceUrl = "https://t.me/Tradexbotofficial";
