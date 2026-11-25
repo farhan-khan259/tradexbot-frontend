@@ -39,7 +39,7 @@ const navItems = [
   { to: "/profile", label: "Profile", Icon: UserRound },
 ];
 
-const customerServiceUrl = "https://t.me/Tradexbotofficial";
+const customerServiceUrl = "https://t.me/Teamsupport82";
 
 export function Layout({ children }: { children: ReactNode }) {
   const { user, logout } = useAuth();
